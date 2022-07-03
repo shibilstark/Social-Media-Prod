@@ -15,5 +15,5 @@ const Color grey = Color.fromARGB(255, 126, 126, 126);
 const Color softGrey = Color.fromARGB(255, 203, 203, 203);
 
 //shimmer
-Color shimmerBaseColor = primary.withOpacity(0.08);
-const Color shimmerHighlightColor = Color.fromARGB(255, 186, 186, 186);
+Color shimmerBaseColor = Color.fromARGB(255, 206, 206, 206);
+const Color shimmerHighlightColor = Color.fromARGB(255, 158, 158, 158);

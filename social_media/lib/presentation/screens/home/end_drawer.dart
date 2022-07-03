@@ -3,14 +3,9 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:social_media/application/authentication/login/login_account_bloc.dart';
 import 'package:social_media/application/theme/theme_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
-
-import 'package:social_media/presentation/screens/login/login_screen.dart';
-import 'package:social_media/presentation/shimmers/profile_part_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
-import 'package:social_media/utility/functions/string_functions.dart';
 import 'package:social_media/utility/util.dart';
 import '../../../core/constants/enums.dart';
 
@@ -30,18 +25,9 @@ class EndDrawer extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      // if (state.userDataIsLoading ||
-                      //     state.userModel == null) {
-                      //   return ProfilePartLoading();
-                      // } else if (state.userDataIsError) {
-                      //   return const Center(
-                      //     child: Text("Can't fetch Data"),
-                      //   );
-                      // } else {
-
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).popAndPushNamed("/profile");
+                          // Navigator.of(context).popAndPushNamed("/profile");
                         },
                         child: Row(
                           children: [
@@ -84,7 +70,6 @@ class EndDrawer extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       Gap(
                         H: 5.sm,
                       ),
@@ -207,70 +192,6 @@ class EndDrawer extends StatelessWidget {
                                       type: CoolAlertType.warning,
                                       okString: "Sure",
                                       text: "Do you want to logout");
-
-                                  // context.read
-                                  // <LoginBloc>().add(
-                                  //     LogOutFromAccount(
-                                  //         model: state.userModel));
-                                  // context
-                                  //     .read<LoginBloc>()
-                                  //     .add(ResetLoginState());
-                                  // Navigator.of(context)
-                                  //     .pushReplacementNamed("/login");
-
-                                  // showDialog(
-                                  //     context: context,
-                                  //     builder: (ctx) => AlertDialog(
-                                  //           title: Text(
-                                  //             "Do you want to logout ?",
-                                  //             style: Theme.of(context)
-                                  //                 .textTheme
-                                  //                 .titleMedium!
-                                  //                 .copyWith(
-                                  //                     fontSize: 20.sm,
-                                  //                     fontWeight:
-                                  //                         FontWeight.w500),
-                                  //           ),
-                                  //           actions: [
-                                  //             TextButton(
-                                  //                 onPressed: () {
-                                  //                   Navigator.of(context).pop();
-                                  //                 },
-                                  //                 child: Text(
-                                  //                   "Close",
-                                  //                   style: Theme.of(context)
-                                  //                       .textTheme
-                                  //                       .titleMedium!
-                                  //                       .copyWith(
-                                  //                           fontSize: 15.sm,
-                                  //                           fontWeight:
-                                  //                               FontWeight
-                                  //                                   .w500),
-                                  //                 )),
-                                  //             TextButton(
-                                  //                 onPressed: () {
-                                  //                   context
-                                  //                       .read<
-                                  //                           LoginAccountBloc>()
-                                  //                       .add(LoggedOut());
-
-                                  //                   Navigator.of(context)
-                                  //                       .pushReplacementNamed(
-                                  //                           "/login");
-                                  //                 },
-                                  //                 child: Text(
-                                  //                   "Log Out",
-                                  //                   style: Theme.of(context)
-                                  //                       .textTheme
-                                  //                       .titleMedium!
-                                  //                       .copyWith(
-                                  //                           fontSize: 15.sm,
-                                  //                           fontWeight:
-                                  //                               FontWeight
-                                  //                                   .w500),
-                                  //                 )),
-                                  //           ],
-                                  //          ));
                                 },
                                 child: SizedBox(
                                   height: 35.sm,

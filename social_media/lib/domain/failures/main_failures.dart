@@ -72,17 +72,17 @@ class WrongEmailOrPassword extends MainFailures implements Exception {
   List<Object?> get props => [err];
 }
 
-class UnknownError extends Equatable implements UnimplementedError {
-  @override
-  String? get message => throw ClientFailure(
-        err: "Something went wrong",
-      );
+// class UnknownError extends Equatable implements UnimplementedError {
+//   @override
+//   String? get message => throw ClientFailure(
+//         err: "Something went wrong",
+//       );
 
-  @override
-  StackTrace? get stackTrace => throw ClientFailure(
-        err: "Something went wrong",
-      );
+//   @override
+//   StackTrace? get stackTrace => throw ClientFailure(
+//         err: "Something went wrong",
+//       );
 
-  @override
-  List<Object?> get props => [message, stackTrace];
-}
+//   @override
+//   List<Object?> get props => [message, stackTrace];
+// }

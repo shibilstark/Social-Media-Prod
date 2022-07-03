@@ -6,17 +6,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:social_media/application/authentication/create_account/create_account_bloc.dart';
 import 'package:social_media/application/theme/theme_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/themes/themes.dart';
-import 'package:social_media/domain/db/user_cred/user_cred.dart';
+
 import 'package:social_media/domain/injectable/injectable.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/presentation/routes/app_router.dart';
-
-import 'application/authentication/email_send/email_send_bloc.dart';
-import 'application/authentication/login/login_account_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,15 +24,8 @@ void main() async {
   await Hive.initFlutter();
   await configureInjection();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: primaryBlue,
+    statusBarColor: softBlack,
   ));
-
-  if (!Hive.isAdapterRegistered(UserModelAdapter().typeId)) {
-    Hive.registerAdapter(UserModelAdapter());
-  }
-  if (!Hive.isAdapterRegistered(UserIdAdapter().typeId)) {
-    Hive.registerAdapter(UserIdAdapter());
-  }
 
   HydratedBlocOverrides.runZoned(
     () => runApp(MyApp()),
@@ -55,15 +44,6 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => ThemeBloc(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<CreateAccountBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<LoginAccountBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<EmailSendBloc>(),
         ),
       ],
       child: ScreenUtilInit(
