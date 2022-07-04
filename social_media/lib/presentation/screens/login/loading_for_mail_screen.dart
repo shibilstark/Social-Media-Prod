@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_media/application/accounts/auth_enums/bloc_enums.dart';
+import 'package:social_media/application/accounts/verification/verification_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
@@ -56,38 +59,76 @@ class LoadingForMailScreen extends StatelessWidget {
                       Gap(
                         H: 30.sm,
                       ),
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: 300.sm,
-                            height: 50.sm,
-                            child: ElevatedButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Verify",
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                )),
-                          ),
-                          Gap(
-                            H: 30.sm,
-                          ),
-                          SizedBox(
-                            width: 300.sm,
-                            height: 50.sm,
-                            child: ElevatedButton(
-                                onPressed: () {},
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Send Verification Email",
+                      BlocConsumer<VerificationBloc, VerificationState>(
+                        listener: (context, state) {
+                          if (state.status == AuthEnum.emailVerified) {
+                            Navigator.of(context).pushReplacementNamed("/home");
+                          }
+
+                          if (state.status == AuthEnum.error) {
+                            Util.showNormalCoolAlerr(
+                                context: context,
+                                type: CoolAlertType.error,
+                                okString: "Close",
+                                text: state.failure!.error);
+                          }
+                          if (state.status == AuthEnum.emailSend) {
+                            Fluttertoast.showToast(
+                                msg: "We send an email to your account");
+                          }
+                        },
+                        builder: (context, state) {
+                          return Column(
+                            children: [
+                              SizedBox(
+                                width: 300.sm,
+                                height: 50.sm,
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        context
+                                            .read<VerificationBloc>()
+                                            .add(Verify());
+                                      });
+                                    },
+                                    child: Text(
+                                      "Verify",
                                       style:
                                           Theme.of(context).textTheme.bodySmall,
-                                    ),
-                                  ],
-                                )),
-                          ),
-                        ],
+                                    )),
+                              ),
+                              Gap(
+                                H: 30.sm,
+                              ),
+                              SizedBox(
+                                width: 300.sm,
+                                height: 50.sm,
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        context
+                                            .read<VerificationBloc>()
+                                            .add(ResendEmail());
+                                      });
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Send Verification Email",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      ],
+                                    )),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ],
                   ),

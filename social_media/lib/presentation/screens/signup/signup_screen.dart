@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:injectable/injectable.dart';
-
+import 'package:social_media/application/accounts/auth_enums/bloc_enums.dart';
+import 'package:social_media/application/accounts/create_account/create_account_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/app_constant_strings.dart';
 import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/core/themes/themes.dart';
-
 import 'package:social_media/domain/models/user_model/user_model.dart';
-
 import 'package:social_media/presentation/widgets/custom_text_field.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 import 'package:social_media/utility/util.dart';
@@ -121,41 +119,78 @@ class SignUpBody extends StatelessWidget {
                     ),
                   ),
                 ),
-                Builder(builder: (context) {
-                  return MaterialButton(
-                      color: pureWhite,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.sm)),
-                      onPressed: () async {
-                        if (_signUpFormValidate() && _checkBoxValue.value) {
-                          final userId = Uuid();
-                          final currentDateTime = DateTime.now();
-                          final model = UserModel(
-                              name:
-                                  _nameController.text.trim().capitalizeFirst(),
-                              email: _emailtController.text.trim(),
-                              password: _passwordController.text.trim(),
-                              isAgreed: true,
-                              isPrivate: false,
-                              isBlocked: false,
-                              creationDate: currentDateTime,
-                              isVerified: false,
-                              userId: userId.v4(),
-                              discription: profileDiscriptionAuto,
-                              followers: [],
-                              following: [],
-                              posts: [],
-                              profileImage: "",
-                              coverImage: "",
-                              isEmailVerified: false);
-                        }
-                      },
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 15.sm, horizontal: 50.sm),
-                          child: Text("Create Account",
-                              style: roundedButtonStyle)));
-                }),
+                BlocConsumer<CreateAccountBloc, CreateAccountState>(
+                  listener: (context, state) {
+                    if (state.state == AuthEnum.succes) {
+                      Util.showCoolAlertFromSignUpToLogin(
+                          context: context,
+                          type: CoolAlertType.success,
+                          okString: "OK",
+                          text: "Successfully Created Account Pls Login");
+                    }
+                    if (state.state == AuthEnum.error) {
+                      Util.showNormalCoolAlerr(
+                          context: context,
+                          type: CoolAlertType.error,
+                          okString: "Close",
+                          text: state.failure!.error);
+                    }
+                  },
+                  builder: (context, state) {
+                    return Builder(builder: (context) {
+                      return MaterialButton(
+                          color: pureWhite,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.sm)),
+                          onPressed: () async {
+                            if (_signUpFormValidate() && _checkBoxValue.value) {
+                              final userId = Uuid();
+                              final currentDateTime = DateTime.now();
+                              final UserModel model = UserModel(
+                                  name: _nameController.text
+                                      .trim()
+                                      .capitalizeFirst(),
+                                  email: _emailtController.text.trim(),
+                                  isAgreed: true,
+                                  isPrivate: false,
+                                  isBlocked: false,
+                                  creationDate: currentDateTime,
+                                  userId: userId.v4(),
+                                  discription: profileDiscriptionAuto,
+                                  followers: [],
+                                  following: [],
+                                  posts: [],
+                                  profileImage: "",
+                                  coverImage: "",
+                                  isEmailVerified: false);
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                context.read<CreateAccountBloc>().add(
+                                    AccountCreated(
+                                        model: model,
+                                        password:
+                                            _passwordController.text.trim()));
+                              });
+                            }
+                          },
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 15.sm, horizontal: 50.sm),
+                              child: state.state == AuthEnum.loading &&
+                                      state.state != AuthEnum.succes &&
+                                      state.state != AuthEnum.error
+                                  ? SizedBox(
+                                      height: 20.sm,
+                                      width: 20.sm,
+                                      child: const Center(
+                                          child: CircularProgressIndicator(
+                                        color: primary,
+                                      )),
+                                    )
+                                  : Text("Create Account",
+                                      style: roundedButtonStyle)));
+                    });
+                  },
+                ),
                 Gap(
                   H: 20.sm,
                 ),

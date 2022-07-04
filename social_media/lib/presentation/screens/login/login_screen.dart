@@ -1,16 +1,19 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_media/application/accounts/auth_enums/bloc_enums.dart';
+import 'package:social_media/application/accounts/login/login_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
-import 'package:social_media/core/constants/enums.dart';
+
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/presentation/widgets/custom_text_field.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
-import '../../../domain/global/global_variables.dart';
-import '../../../utility/util.dart';
+import 'package:social_media/utility/util.dart';
 
 TextEditingController _emailController = TextEditingController();
 TextEditingController _passwordController = TextEditingController();
@@ -104,25 +107,65 @@ class LoginBody extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Builder(builder: (context) {
-                      return MaterialButton(
-                          color: pureWhite,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.sm)),
-                          onPressed: () async {
-                            if (_loginFormValidate()) {
-                              final email = _emailController.text.trim();
-                              final password = _passwordController.text.trim();
-                            }
-                          },
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 15.sm, horizontal: 50.sm),
-                              child: Text(
-                                "Sign In",
-                                style: roundedButtonStyle,
-                              )));
-                    }),
+                    BlocConsumer<LoginBloc, LoginState>(
+                      listener: (context, state) {
+                        if (state.status == AuthEnum.emailVerified) {
+                          Navigator.of(context).pushReplacementNamed("/home");
+                          Fluttertoast.showToast(msg: "Logged in Successfully");
+                        }
+                        if (state.status == AuthEnum.emailNotVerified) {
+                          Navigator.of(context)
+                              .pushReplacementNamed("/verifyemail");
+                        }
+                        if (state.status == AuthEnum.error) {
+                          Util.showNormalCoolAlerr(
+                              context: context,
+                              type: CoolAlertType.error,
+                              okString: "Close",
+                              text: state.failure!.error);
+                        }
+                      },
+                      builder: (context, state) {
+                        return Builder(builder: (context) {
+                          return MaterialButton(
+                              color: pureWhite,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.sm)),
+                              onPressed: () async {
+                                if (_loginFormValidate()) {
+                                  final email = _emailController.text.trim();
+                                  final password =
+                                      _passwordController.text.trim();
+
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    context.read<LoginBloc>().add(LoggedIn(
+                                        email: email, password: password));
+                                  });
+                                }
+                              },
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 15.sm, horizontal: 50.sm),
+                                  child: state.status == AuthEnum.loading &&
+                                          state.status !=
+                                              AuthEnum.emailVerified &&
+                                          state.status !=
+                                              AuthEnum.emailNotVerified &&
+                                          state.status != AuthEnum.error
+                                      ? SizedBox(
+                                          height: 20.sm,
+                                          width: 20.sm,
+                                          child: const Center(
+                                              child: CircularProgressIndicator(
+                                            color: primary,
+                                          )),
+                                        )
+                                      : Text("Log In",
+                                          style: roundedButtonStyle)));
+                        });
+                      },
+                    ),
                     Gap(
                       H: 20.sm,
                     ),

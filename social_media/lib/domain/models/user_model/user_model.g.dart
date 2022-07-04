@@ -20,26 +20,24 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       userId: fields[0] as String,
       name: fields[1] as String,
       email: fields[2] as String,
-      password: fields[3] as String,
       isAgreed: fields[4] as bool,
       isPrivate: fields[5] as bool,
       isBlocked: fields[6] as bool,
       creationDate: fields[7] as DateTime,
-      isVerified: fields[8] as bool,
       followers: (fields[9] as List).cast<String>(),
       following: (fields[10] as List).cast<String>(),
       posts: (fields[11] as List).cast<String>(),
       discription: fields[12] as String,
       profileImage: fields[13] as String,
-      coverImage: fields[14] as String,
-      isEmailVerified: fields[15] as bool,
+      coverImage: fields[3] as String,
+      isEmailVerified: fields[8] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -47,7 +45,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(2)
       ..write(obj.email)
       ..writeByte(3)
-      ..write(obj.password)
+      ..write(obj.coverImage)
       ..writeByte(4)
       ..write(obj.isAgreed)
       ..writeByte(5)
@@ -57,7 +55,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(7)
       ..write(obj.creationDate)
       ..writeByte(8)
-      ..write(obj.isVerified)
+      ..write(obj.isEmailVerified)
       ..writeByte(9)
       ..write(obj.followers)
       ..writeByte(10)
@@ -67,11 +65,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(12)
       ..write(obj.discription)
       ..writeByte(13)
-      ..write(obj.profileImage)
-      ..writeByte(14)
-      ..write(obj.coverImage)
-      ..writeByte(15)
-      ..write(obj.isEmailVerified);
+      ..write(obj.profileImage);
   }
 
   @override
