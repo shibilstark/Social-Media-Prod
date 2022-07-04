@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:social_media/core/collections/firebase_collections.dart';
 import 'package:social_media/domain/db/user_data/user_data.dart';
+import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/domain/failures/main_failures.dart';
 import 'package:dartz/dartz.dart';
@@ -70,6 +71,8 @@ class AccountServices implements AccountRepo {
 
           await UserDataStore.saveUserData(
               id: user.data()[UmKeys.userId], email: email);
+
+          Global.USER_DATA = (await UserDataStore.getUserData())!;
           return Left(UserModel.fromMap(user.data()));
         } else {
           return const Right(MainFailures(

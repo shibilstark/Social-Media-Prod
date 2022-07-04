@@ -13,7 +13,9 @@ const Color darkBg = Color.fromARGB(255, 22, 22, 22);
 const Color avatarBg = Color(0xFF0A70A6);
 const Color grey = Color.fromARGB(255, 126, 126, 126);
 const Color softGrey = Color.fromARGB(255, 203, 203, 203);
+const Color darkBlue = Color.fromARGB(255, 62, 44, 117);
 
 //shimmer
-Color shimmerBaseColor = Color.fromARGB(255, 206, 206, 206);
-const Color shimmerHighlightColor = Color.fromARGB(255, 158, 158, 158);
+Color shimmerBaseColor = Color.fromARGB(255, 216, 216, 216);
+// const Color shimmerHighlightColor = Color.fromARGB(255, 156, 156, 156);
+Color shimmerHighlightColor = Colors.grey.shade100;

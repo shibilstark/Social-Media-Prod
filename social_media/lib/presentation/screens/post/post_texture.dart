@@ -125,13 +125,13 @@ class LikeAndCommentRow extends StatelessWidget {
               child: Row(
                 children: [
                   IconTheme(
-                      data: Theme.of(context).primaryIconTheme,
+                      data: Theme.of(context).iconTheme,
                       child: Icon(
                         Icons.bolt,
                         size: 13.sm,
                       )),
                   Text(
-                    "1099 Bolts",
+                    "1099 lights",
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -142,7 +142,7 @@ class LikeAndCommentRow extends StatelessWidget {
               child: Row(
                 children: [
                   IconTheme(
-                      data: Theme.of(context).primaryIconTheme,
+                      data: Theme.of(context).iconTheme,
                       child: Icon(
                         Icons.comment,
                         size: 13.sm,
@@ -187,7 +187,7 @@ class PostActionButton extends StatelessWidget {
         child: IconButton(
           constraints: BoxConstraints(maxHeight: 36.sm, maxWidth: 36.sm),
           icon: IconTheme(
-              data: Theme.of(context).primaryIconTheme,
+              data: Theme.of(context).iconTheme,
               child: Icon(
                 icon,
                 size: 20.sm,

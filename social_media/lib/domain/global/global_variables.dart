@@ -1,3 +1,5 @@
+import 'package:social_media/domain/db/user_data/user_data.dart';
+
 class Global {
-  static String USER_ID = "";
+  static UserData USER_DATA = UserData(id: "", email: "");
 }
