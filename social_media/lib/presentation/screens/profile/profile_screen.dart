@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:social_media/application/user/user_bloc.dart';
+import 'package:social_media/application/user/user_enums/user_enums.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
-import 'package:social_media/domain/db/user_data/user_data.dart';
-import 'package:social_media/domain/global/global_variables.dart';
-import 'package:social_media/presentation/screens/post/post_texture.dart';
+import 'package:social_media/presentation/screens/new_post/new_post_modal.dart';
+import 'package:social_media/presentation/screens/post/post_texture..dart';
+import 'package:social_media/presentation/screens/profile/widgets/profile_part.dart';
+import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
+
 import 'package:social_media/presentation/widgets/gap.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -49,7 +54,11 @@ class ProfileAppBar extends StatelessWidget {
               .copyWith(color: pureWhite),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.add_photo_alternate)),
+          IconButton(
+              onPressed: () {
+                showNewPostBottomSheet(context: context);
+              },
+              icon: Icon(Icons.add_photo_alternate)),
           IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
           Gap(
             W: 15.sm,
@@ -65,186 +74,57 @@ class ProfileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<UserBloc>().add(GetCurrenUser());
+    });
     return Padding(
       padding: constPadding,
-      child: ListView(
-        children: [
-          Stack(
-            // alignment: Alignment.,
+      child: BlocConsumer<UserBloc, UserState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          final model = state.model!;
+          return ListView(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.sm),
-                    topRight: Radius.circular(40.sm)),
-                child: Container(
-                  color: primaryBlue,
-                  height: 150.sm,
-                  width: double.infinity,
-                ),
+              state.status == UserEnums.loading || state.model == null
+                  ? InnerProfileLoading()
+                  : InnerProfilePartInheritedWidget(
+                      model: state.model!,
+                      widget: InnerProfilePart(),
+                    ),
+              Gap(
+                H: 20.sm,
               ),
               Padding(
-                padding: EdgeInsets.only(top: 90.sm, left: 10.sm, right: 10.sm),
+                padding: EdgeInsets.symmetric(horizontal: 10.sm),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      // crossAxisAlignment: CrossAxisAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 65.sm,
-                          backgroundColor: darkBlue,
-                          child: CircleAvatar(
-                            backgroundImage:
-                                AssetImage("assets/dummy/dummyDP.png"),
-                            radius: 60.sm,
-                            backgroundColor: secondaryBlue,
-                          ),
-                        ),
-                        Spacer(),
-                        LimitedBox(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 50.sm),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ItemBox(title: "Follewers", value: "1000"),
-                                Gap(
-                                  W: 10.sm,
-                                ),
-                                ItemBox(title: "Follewing", value: "1000"),
-                                Gap(
-                                  W: 10.sm,
-                                ),
-                                ItemBox(title: "Posts", value: "1000"),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
+                    Text(
+                      "POSTS",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontSize: 18),
                     ),
-                    Gap(
-                      H: 10.sm,
+                    Divider(
+                      color: primaryBlue,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 10.sm),
-                      child: Text(
-                        "User Name",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontSize: 18.sm),
+                    ListView.separated(
+                      separatorBuilder: (context, index) => Gap(
+                        H: 10.sm,
                       ),
-                    )
+                      physics: NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => PostTexture(),
+                      itemCount: 10,
+                    ),
                   ],
                 ),
               )
             ],
-          ),
-          Gap(
-            H: 10.sm,
-          ),
-
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.sm),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  dummyLongText,
-                  maxLines: 3,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(fontSize: 15.sm),
-                ),
-                Gap(
-                  H: 10.sm,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: ElevatedButton(
-                      child: Text(
-                        "Follow",
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontSize: 15.sm, fontWeight: FontWeight.w500),
-                      ),
-                      onPressed: () {},
-                    )),
-                    Gap(
-                      W: 20.sm,
-                    ),
-                    Expanded(
-                        child: ElevatedButton(
-                      child: Text(
-                        "Message",
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            fontSize: 15.sm, fontWeight: FontWeight.w500),
-                      ),
-                      onPressed: () {},
-                    )),
-                  ],
-                )
-              ],
-            ),
-          )
-
-          // ClipRRect(
-          //   borderRadius: BorderRadius.only(
-          //       bottomLeft: Radius.circular(40.sm),
-          //       bottomRight: Radius.circular(40.sm)),
-          //   child: Container(
-          //     color: primary,
-          //     height: 80.sm,
-          //     width: double.infinity,
-          //   ),
-          // ),
-        ],
-      ),
-    );
-  }
-}
-
-class ItemBox extends StatelessWidget {
-  const ItemBox({
-    Key? key,
-    required this.title,
-    required this.value,
-  }) : super(key: key);
-
-  final String title;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 70.sm,
-      width: 70.sm,
-      decoration: BoxDecoration(
-          // color: smoothWhite,
-          borderRadius: BorderRadius.circular(10.sm)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontSize: 15.sm),
-          ),
-          Gap(
-            H: 5.sm,
-          ),
-          Text(
-            value,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontSize: 17.sm),
-          )
-        ],
+          );
+        },
       ),
     );
   }

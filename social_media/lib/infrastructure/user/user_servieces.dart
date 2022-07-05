@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
 import 'package:social_media/core/collections/firebase_collections.dart';
 import 'package:social_media/domain/db/user_data/user_data.dart';

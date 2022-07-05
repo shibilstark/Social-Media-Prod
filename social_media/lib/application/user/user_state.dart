@@ -9,7 +9,7 @@ class UserState extends Equatable {
   UserState({required this.status, required this.failure, required this.model});
 
   @override
-  List<Object?> get props => throw [failure, model, status];
+  List<Object?> get props => [failure, model, status];
 
   UserState copyWith({
     UserEnums? status,
@@ -32,5 +32,5 @@ class UserInitial extends UserState {
       : super(status: status, failure: failure, model: model);
 
   @override
-  List<Object?> get props => throw [failure, model, status];
+  List<Object?> get props => [failure, model, status];
 }

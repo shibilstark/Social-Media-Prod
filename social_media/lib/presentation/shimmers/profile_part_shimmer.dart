@@ -20,6 +20,7 @@ class ProfilePartLoading extends StatelessWidget {
           W: 10.sm,
         ),
         Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ShimmerBasicRectangleWidget(W: 50.sm),

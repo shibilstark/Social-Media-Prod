@@ -106,6 +106,14 @@ class MyTheme {
           // foregroundColor: MaterialStateProperty.all(darkBg),
         ),
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: pureWhite,
+          elevation: 5,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40.sm),
+                topRight: Radius.circular(40.sm)),
+          )),
       dialogBackgroundColor: pureWhite,
       textTheme: TextTheme(
         titleSmall: TextStyle(
@@ -156,6 +164,14 @@ class MyTheme {
     ),
     bottomNavigationBarTheme:
         BottomNavigationBarThemeData(backgroundColor: darkBg),
+    bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: darkBg,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(40.sm),
+              topRight: Radius.circular(40.sm)),
+        )),
   );
 }
 

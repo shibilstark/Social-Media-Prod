@@ -41,5 +41,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         },
       );
     });
+
+    on<LoggedOut>((event, emit) async {
+      await _accountServices.logOut();
+      emit(state.copyWith(status: AuthEnum.succes));
+    });
   }
 }

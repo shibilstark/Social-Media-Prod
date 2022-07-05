@@ -39,7 +39,7 @@ class AccountServices implements AccountRepo {
       log(e.toString());
 
       return Right(MainFailures(
-          error: e.toString(), failureType: MyAppFilures.firebaseFailure));
+          error: e.code.toString(), failureType: MyAppFilures.firebaseFailure));
     } catch (e) {
       log(e.toString());
       return Right(MainFailures(
@@ -59,12 +59,14 @@ class AccountServices implements AccountRepo {
   Future<Either<UserModel, MainFailures>> login(
       {required String email, required String password}) async {
     try {
+      bool found = false;
       final collection =
           await FirebaseFirestore.instance.collection(Collections.users).get();
       final users = collection.docs;
 
       for (var user in users) {
         if (user.data()[UmKeys.email] == email) {
+          found = true;
           await FirebaseAuth.instance
               .signInWithEmailAndPassword(email: email, password: password);
           // final User currentUser = userCred.user!;
@@ -74,14 +76,16 @@ class AccountServices implements AccountRepo {
 
           Global.USER_DATA = (await UserDataStore.getUserData())!;
           return Left(UserModel.fromMap(user.data()));
-        } else {
-          return const Right(MainFailures(
-              error: "User Not Found",
-              failureType: MyAppFilures.emailOrPasswordFailure));
         }
       }
+
+      if (!found) {
+        return const Right(MainFailures(
+            error: "User Not Found",
+            failureType: MyAppFilures.emailOrPasswordFailure));
+      }
     } on FirebaseException catch (e) {
-      e.toString();
+      e.code.toString();
       return Right(MainFailures(
           error: e.code.toString(), failureType: MyAppFilures.firebaseFailure));
     } catch (e) {
@@ -107,7 +111,11 @@ class AccountServices implements AccountRepo {
   Future<Either<UserModel, MainFailures>> logOut() async {
     try {
       await UserDataStore.clearUserData();
-      await FirebaseAuth.instance.signOut();
+      await UserDataStore.clearUserData();
+      log("data cleared");
+      // await FirebaseAuth.instance.signOut();
+      Global.USER_DATA = UserData(id: "", email: "");
+      log("sign out");
     } on FirebaseException catch (e) {
       e.toString();
       return Right(MainFailures(
@@ -142,7 +150,7 @@ class AccountServices implements AccountRepo {
 
       return const Left(true);
     } on FirebaseException catch (e) {
-      e.toString();
+      e.code.toString();
       return Right(MainFailures(
           error: e.code.toString(), failureType: MyAppFilures.firebaseFailure));
     } catch (e) {
@@ -197,7 +205,7 @@ class AccountServices implements AccountRepo {
         return const Left(false);
       }
     } on FirebaseException catch (e) {
-      e.toString();
+      e.code.toString();
       return Right(MainFailures(
           error: e.code.toString(), failureType: MyAppFilures.firebaseFailure));
     } catch (e) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media/presentation/screens/home/home_screen.dart';
 import 'package:social_media/presentation/screens/login/loading_for_mail_screen.dart';
 import 'package:social_media/presentation/screens/login/login_screen.dart';
+import 'package:social_media/presentation/screens/new_post/new_post_screen.dart';
 import 'package:social_media/presentation/screens/profile/profile_screen.dart';
 import 'package:social_media/presentation/screens/signup/signup_screen.dart';
 import 'package:social_media/presentation/screens/splash/splas_screen.dart';
@@ -22,6 +23,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => LoadingForMailScreen());
       case "/profile":
         return MaterialPageRoute(builder: (_) => ProfileScreen());
+      case "/newpost":
+        return MaterialPageRoute(builder: (_) => NewPostScreen());
 
       default:
         // return MaterialPageRoute(builder: (_) => SplashScreen());

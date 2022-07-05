@@ -23,7 +23,7 @@ class UserDataStore {
 
   static Future<UserData?> getUserData() async {
     final db = await Hive.openBox<UserData>(DbVaues.userData);
-    if (db.isEmpty) {
+    if (db.isEmpty || db == null) {
       return null;
     } else {
       return db.values.first;
@@ -32,7 +32,7 @@ class UserDataStore {
 
   static clearUserData() async {
     final db = await Hive.openBox<UserData>(DbVaues.userData);
-
     await db.clear();
+    await db.close();
   }
 }

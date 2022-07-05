@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media/core/colors/colors.dart';
-import 'package:social_media/presentation/screens/post/post_texture.dart';
+import 'package:social_media/presentation/screens/post/post_texture..dart';
+import 'package:social_media/presentation/screens/profile/profile_screen.dart';
 import 'package:social_media/presentation/shimmers/base.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 
@@ -14,44 +15,78 @@ class InnerProfileLoading extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Stack(
+            // alignment: Alignment.,
             children: [
-              ShimmerBaseCircleWIdget(
-                rad: 40.sm,
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40.sm),
+                    topRight: Radius.circular(40.sm)),
+                child: ShimmerBasicRectangleWidget(
+                  W: double.infinity,
+                  H: 150.sm,
+                ),
               ),
-              ShimmerBasicRectangleWidget(
-                H: 70.sm,
-                W: 70.sm,
-              ),
-              ShimmerBasicRectangleWidget(
-                H: 70.sm,
-                W: 70.sm,
-              ),
-              ShimmerBasicRectangleWidget(
-                H: 70.sm,
-                W: 70.sm,
-              ),
-              Gap(
-                H: 20.sm,
-              ),
+              Padding(
+                padding: EdgeInsets.only(top: 90.sm, left: 10.sm, right: 10.sm),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 65.sm,
+                          backgroundImage:
+                              AssetImage("assets/dummy/dummyDP.png"),
+                        ),
+                        Spacer(),
+                        LimitedBox(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 50.sm),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ShimmerBasicRectangleWidget(
+                                  H: 50.sm,
+                                  W: 50.sm,
+                                ),
+                                Gap(
+                                  W: 20.sm,
+                                ),
+                                ShimmerBasicRectangleWidget(
+                                  H: 50.sm,
+                                  W: 50.sm,
+                                ),
+                                Gap(
+                                  W: 20.sm,
+                                ),
+                                ShimmerBasicRectangleWidget(
+                                  H: 50.sm,
+                                  W: 50.sm,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Gap(
+                      H: 10.sm,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.sm),
+                      child: ShimmerBasicRectangleWidget(
+                        W: 100.sm,
+                        H: 20.sm,
+                      ),
+                    )
+                  ],
+                ),
+              )
             ],
           ),
           Gap(
-            H: 20.sm,
-          ),
-          ShimmerBasicRectangleWidget(
-            W: 70.sm,
-          ),
-          Gap(
-            H: 5.sm,
-          ),
-          ShimmerBasicRectangleWidget(
-            W: 70.sm,
             H: 10.sm,
-          ),
-          Gap(
-            H: 20.sm,
           ),
           ShimmerBasicRectangleWidget(
             W: double.infinity,

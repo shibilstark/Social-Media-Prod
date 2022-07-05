@@ -8,7 +8,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final data = (await UserDataStore.getUserData());
 
       if (data == null) {
@@ -16,6 +16,7 @@ class SplashScreen extends StatelessWidget {
       } else {
         Global.USER_DATA = data;
         Navigator.of(context).pushReplacementNamed("/home");
+        // Navigator.of(context).pushReplacementNamed("/newpost");
       }
     });
 

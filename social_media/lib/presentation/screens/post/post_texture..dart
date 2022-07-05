@@ -220,6 +220,22 @@ class PostImage extends StatelessWidget {
   }
 }
 
+// If The post is a video
+
+class PostVideo extends StatelessWidget {
+  const PostVideo({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(5.sm),
+      child: Container(),
+    );
+  }
+}
+
 // User Information and The Report Button
 
 class UserInfoRow extends StatelessWidget {

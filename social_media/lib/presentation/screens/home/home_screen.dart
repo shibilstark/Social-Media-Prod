@@ -171,6 +171,7 @@ import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/presentation/screens/home/end_drawer.dart';
+import 'package:social_media/presentation/screens/new_post/new_post_modal.dart';
 import 'package:social_media/presentation/screens/post/post_screen.dart';
 
 import 'package:social_media/presentation/widgets/gap.dart';
@@ -334,7 +335,9 @@ class MainAppBar extends StatelessWidget {
           Gap(W: 30.sm),
           IconButton(
             icon: Icon(Icons.add_photo_alternate),
-            onPressed: () {},
+            onPressed: () {
+              showNewPostBottomSheet(context: context);
+            },
           ),
           Gap(W: 15.sm),
         ],
