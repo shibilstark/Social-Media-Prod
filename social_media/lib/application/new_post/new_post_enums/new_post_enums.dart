@@ -5,7 +5,9 @@ enum NewPostEnum {
   filePicked,
   fileLoading,
   fileUploaded,
+  fileUploadingStarted,
   fileUploading,
+
   success,
   fileNotPicked,
   fileUploadError,

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:social_media/core/collections/firebase_collections.dart';
 import 'package:social_media/domain/db/user_data/user_data.dart';
+import 'package:social_media/domain/models/post/post_model.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/domain/failures/main_failures.dart';
 import 'package:dartz/dartz.dart';

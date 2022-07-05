@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:social_media/application/new_post/new_post_enums/new_post_enums.dart';
 import 'package:social_media/core/constants/enums.dart';
@@ -20,7 +21,8 @@ class NewPostBloc extends Bloc<NewPostEvent, NewPostState> {
             post: null,
             status: NewPostEnum.initial,
             failure: null,
-            postType: null)) {
+            postType: null,
+            task: null)) {
     on<SelectPost>((event, emit) async {
       emit(state.copyWith(status: NewPostEnum.loading));
       Either<PostTypeModel?, MainFailures> result;
@@ -51,7 +53,18 @@ class NewPostBloc extends Bloc<NewPostEvent, NewPostState> {
     });
 
     on<UploadPost>((event, emit) async {
-      emit(state.copyWith(status: NewPostEnum.loading));
+      emit(state.copyWith(status: NewPostEnum.fileUploadingStarted));
+
+      final result = await _postServiece.uploadPost(model: event.model);
+
+      result.fold(
+        (task) {
+          emit(state.copyWith(status: NewPostEnum.fileUploaded, task: task));
+        },
+        (error) {
+          emit(state.copyWith(status: NewPostEnum.fileUploadError));
+        },
+      );
     });
   }
 }

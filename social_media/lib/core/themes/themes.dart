@@ -91,6 +91,7 @@ import 'package:social_media/core/colors/colors.dart';
 
 class MyTheme {
   static ThemeData lightTheme = ThemeData(
+      dialogTheme: DialogTheme(backgroundColor: primaryBlue),
       scaffoldBackgroundColor: smoothWhite,
       appBarTheme: const AppBarTheme(backgroundColor: primaryBlue),
       iconTheme: const IconThemeData(
@@ -132,6 +133,7 @@ class MyTheme {
       bottomNavigationBarTheme:
           BottomNavigationBarThemeData(backgroundColor: primaryBlue));
   static ThemeData darkTheme = ThemeData(
+    dialogTheme: DialogTheme(backgroundColor: darkBg),
     scaffoldBackgroundColor: softBlack,
     appBarTheme: const AppBarTheme(backgroundColor: darkBg),
     iconTheme: const IconThemeData(

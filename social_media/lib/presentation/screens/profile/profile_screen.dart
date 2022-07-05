@@ -117,7 +117,7 @@ class ProfileBody extends StatelessWidget {
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       itemBuilder: (context, index) => PostTexture(),
-                      itemCount: 10,
+                      itemCount: model.posts.length,
                     ),
                   ],
                 ),

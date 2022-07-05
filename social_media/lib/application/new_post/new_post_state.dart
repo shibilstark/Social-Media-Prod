@@ -6,27 +6,29 @@ class NewPostState extends Equatable {
   FilePickerResult? post;
   MainFailures? failure;
   PostType? postType;
+  UploadTask? task;
 
   NewPostState(
       {required this.post,
       required this.status,
       required this.failure,
-      required this.postType});
+      required this.postType,
+      this.task});
   @override
-  List<Object?> get props => [status, post, postType];
+  List<Object?> get props => [status, post, postType, failure, task];
 
-  NewPostState copyWith({
-    NewPostEnum? status,
-    FilePickerResult? post,
-    MainFailures? failure,
-    PostType? postType,
-  }) {
+  NewPostState copyWith(
+      {NewPostEnum? status,
+      FilePickerResult? post,
+      MainFailures? failure,
+      PostType? postType,
+      UploadTask? task}) {
     return NewPostState(
-      status: status ?? this.status,
-      post: post ?? this.post,
-      failure: failure ?? this.failure,
-      postType: postType ?? this.postType,
-    );
+        status: status ?? this.status,
+        post: post ?? this.post,
+        failure: failure ?? this.failure,
+        postType: postType ?? this.postType,
+        task: task ?? this.task);
   }
 }
 
@@ -35,7 +37,8 @@ class NewPostInitial extends NewPostState {
       {required FilePickerResult? post,
       required NewPostEnum status,
       required MainFailures? failure,
-      required PostType? postType})
+      required PostType? postType,
+      required UploadTask? task})
       : super(post: post, status: status, failure: failure, postType: postType);
   @override
   List<Object?> get props => [status, post, postType, failure];

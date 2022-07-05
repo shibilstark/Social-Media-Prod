@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+
 import 'package:social_media/core/constants/enums.dart';
 import 'package:social_media/domain/models/comment/comment_model.dart';
 import 'package:social_media/domain/models/like/like_model.dart';
@@ -39,7 +40,7 @@ class PostModel {
       'creationData': creationData.millisecondsSinceEpoch,
       'comments': comments.map((x) => x.toMap()).toList(),
       'lights': lights.map((x) => x.toMap()).toList(),
-      'type': type,
+      'type': type.name,
       'reports': reports.map((x) => x.toMap()).toList(),
       'lastUpdate': lastUpdate.millisecondsSinceEpoch,
     };
@@ -77,4 +78,30 @@ class PostModel {
 
   factory PostModel.fromJson(String source) =>
       PostModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  PostModel copyWith({
+    String? userId,
+    String? post,
+    String? id,
+    DateTime? creationData,
+    List<PostComment>? comments,
+    List<PostLights>? lights,
+    PostType? type,
+    List<PostReport>? reports,
+    DateTime? lastUpdate,
+    BoxFit? fit,
+  }) {
+    return PostModel(
+      userId: userId ?? this.userId,
+      post: post ?? this.post,
+      id: id ?? this.id,
+      creationData: creationData ?? this.creationData,
+      comments: comments ?? this.comments,
+      lights: lights ?? this.lights,
+      type: type ?? this.type,
+      reports: reports ?? this.reports,
+      lastUpdate: lastUpdate ?? this.lastUpdate,
+      fit: fit ?? this.fit,
+    );
+  }
 }

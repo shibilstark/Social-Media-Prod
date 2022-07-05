@@ -46,6 +46,7 @@ android {
         // applicationId "com.example.social_media"
         applicationId "com.devstark.socialmedia"
         minSdkVersion 21
+        multiDexEnabled true
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -70,5 +71,6 @@ apply plugin: 'com.google.gms.google-services'
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
+    implementation 'com.android.support:multidex:1.0.3'
    
 }
