@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:social_media/core/constants/enums.dart';
 import 'package:social_media/domain/failures/main_failures.dart';
+import 'package:social_media/domain/models/global_feed_model/global_feed_model.dart';
 import 'package:social_media/domain/models/post/post_model.dart';
 import 'package:social_media/domain/models/post_type/post_type.dart';
 
@@ -13,4 +13,5 @@ abstract class PostRepo {
       {required PostModel model});
   Future<Either<List<PostModel>, MainFailures>> getUserPosts(
       {required String userId});
+  Future<Either<List<GlobalFeed>, MainFailures>> getAllPostFeeds();
 }

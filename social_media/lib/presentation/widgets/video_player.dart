@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -21,10 +22,11 @@ class _LocalVideoPlayerState extends State<LocalVideoPlayer> {
   @override
   void initState() {
     localVideoPlayerController = VideoPlayerController.file(File(widget.path),
-        videoPlayerOptions: VideoPlayerOptions())
+        videoPlayerOptions: VideoPlayerOptions(
+            allowBackgroundPlayback: false, mixWithOthers: false))
       ..addListener(() => setState(() {}))
-      ..setLooping(true)
-      ..initialize().then((value) => localVideoPlayerController.play());
+      ..setLooping(false)
+      ..initialize().then((value) => localVideoPlayerController.pause());
     super.initState();
   }
 
@@ -91,6 +93,106 @@ class _LocalVideoPlayerState extends State<LocalVideoPlayer> {
                       },
                       icon: Icon(
                         localVideoPlayerController.value.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
+                        color: pureWhite,
+                      ))
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class OnlineVideoPlayer extends StatefulWidget {
+  OnlineVideoPlayer({Key? key, required this.path}) : super(key: key);
+
+  final String path;
+
+  @override
+  State<OnlineVideoPlayer> createState() => _OnlineVideoPlayerState();
+}
+
+class _OnlineVideoPlayerState extends State<OnlineVideoPlayer> {
+  late VideoPlayerController onlineVideoPlayerController;
+  @override
+  void initState() {
+    onlineVideoPlayerController = VideoPlayerController.network(widget.path,
+        videoPlayerOptions: VideoPlayerOptions(
+            allowBackgroundPlayback: false, mixWithOthers: false))
+      ..addListener(() => setState(() {}))
+      ..setLooping(false)
+      ..initialize().then((value) => onlineVideoPlayerController.pause());
+    super.initState();
+  }
+
+  _getPosition() {
+    final duration = Duration(
+        milliseconds:
+            onlineVideoPlayerController.value.position.inMilliseconds.round());
+
+    return [duration.inMinutes, duration.inSeconds]
+        .map((seg) => seg.remainder(60).toString().padLeft(2, "0"))
+        .join(":");
+  }
+
+  @override
+  void dispose() {
+    onlineVideoPlayerController.dispose();
+    log("VideoDisposed");
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            AspectRatio(
+                aspectRatio: onlineVideoPlayerController.value.aspectRatio,
+                child: VideoPlayer(onlineVideoPlayerController)),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.sm),
+              child: Row(
+                children: [
+                  Text(
+                    _getPosition(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(color: pureWhite, fontSize: 12.sm),
+                  ),
+                  Gap(
+                    W: 5.sm,
+                  ),
+                  Expanded(
+                    child: VideoProgressIndicator(
+                      onlineVideoPlayerController,
+                      allowScrubbing: true,
+                      padding: EdgeInsets.all(3),
+                      colors: const VideoProgressColors(
+                          playedColor: primaryBlue,
+                          bufferedColor: pureWhite,
+                          backgroundColor: smoothWhite),
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (onlineVideoPlayerController.value.isPlaying) {
+                            onlineVideoPlayerController.pause();
+                          } else {
+                            onlineVideoPlayerController.play();
+                          }
+                        });
+                      },
+                      icon: Icon(
+                        onlineVideoPlayerController.value.isPlaying
                             ? Icons.pause
                             : Icons.play_arrow,
                         color: pureWhite,

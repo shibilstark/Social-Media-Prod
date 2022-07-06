@@ -151,7 +151,8 @@ class NewPostBody extends StatelessWidget {
                                           BorderRadius.circular(10.sm)),
                                 );
                               })
-                          : state.postType == PostType.video
+                          : state.postType == PostType.video &&
+                                  state.postType != PostType.image
                               ? Container(
                                   height: 220.sm,
                                   width: 350.sm,
@@ -245,7 +246,8 @@ class NewPostBody extends StatelessWidget {
               ),
               BlocConsumer<NewPostBloc, NewPostState>(
                 listener: (context, state) async {
-                  if (state.status == NewPostEnum.fileUploadError) {
+                  if (state.status == NewPostEnum.fileUploadError ||
+                      state.status == NewPostEnum.error) {
                     Navigator.of(context).pop();
                     Util.showNormalCoolAlerr(
                         context: context,
@@ -269,12 +271,15 @@ class NewPostBody extends StatelessWidget {
                         barrierDismissible: false,
                         context: context,
                         builder: (context) {
-                          return AlertDialog(
-                            content: Container(
-                              height: 100.sm,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  color: pureWhite,
+                          return WillPopScope(
+                            onWillPop: () async => false,
+                            child: AlertDialog(
+                              content: Container(
+                                height: 100.sm,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: pureWhite,
+                                  ),
                                 ),
                               ),
                             ),
@@ -295,16 +300,18 @@ class NewPostBody extends StatelessWidget {
                         final postId = Uuid().v4();
                         final creationDate = DateTime.now();
                         final postModel = PostModel(
+                            tag: _tag.text.trim(),
+                            dicription: _discr.text.trim(),
                             userId: Global.USER_DATA.id,
                             post: state.post!.files.single.path!,
                             id: postId,
                             creationData: creationDate,
                             comments: [],
                             lights: [],
-                            type: state.postType!,
+                            type: state.postType!.toString(),
                             reports: [],
                             lastUpdate: creationDate,
-                            fit: _fit.value);
+                            fit: _fit.value.toString());
 
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           context

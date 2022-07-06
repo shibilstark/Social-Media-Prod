@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media/core/colors/colors.dart';
@@ -35,6 +37,7 @@ class InnerProfilePart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = InnerProfilePartInheritedWidget.of(context)!.model;
+    log(model.coverImage);
 
     return Column(
       children: [
@@ -45,19 +48,24 @@ class InnerProfilePart extends StatelessWidget {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(40.sm),
                   topRight: Radius.circular(40.sm)),
-              child: model.coverImage == ""
+              child: model.coverImage == "" || model.coverImage.isEmpty
                   ? Container(
+                      constraints: BoxConstraints(maxHeight: 150.sm),
                       color: primaryBlue,
-                      height: 150.sm,
                       width: double.infinity,
                     )
                   : Container(
-                      height: 150.sm,
                       width: double.infinity,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: NetworkImage(model.coverImage),
-                              fit: BoxFit.cover)),
+                      // decoration: BoxDecoration(
+                      //     image: DecorationImage(
+                      //   image: NetworkImage(model.coverImage),
+                      //   // fit: BoxFit.cover
+                      // )),
+                      constraints: BoxConstraints(maxHeight: 150.sm),
+                      child: Image.network(
+                        model.coverImage,
+                        fit: BoxFit.cover,
+                      ),
                     ),
             ),
             Padding(

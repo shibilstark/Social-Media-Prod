@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,6 +11,8 @@ import 'package:social_media/core/constants/enums.dart';
 import 'package:social_media/domain/failures/main_failures.dart';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:social_media/domain/global/global_variables.dart';
+import 'package:social_media/domain/models/global_feed_model/global_feed_model.dart';
 
 import 'package:social_media/domain/models/post/post_model.dart';
 import 'package:social_media/domain/models/post_type/post_type.dart';
@@ -133,24 +136,36 @@ class PostServieces implements PostRepo {
     try {
       final postCollection =
           await FirebaseFirestore.instance.collection(Collections.post).get();
+      final userCollection = await FirebaseFirestore.instance
+          .collection(Collections.users)
+          .doc(Global.USER_DATA.id);
 
       final posts = postCollection.docs.toList();
 
+      final user = await userCollection.get();
+
       final List<PostModel> showPosts = [];
 
+      final postsInModel = user.data()!["posts"];
+
       for (var post in posts) {
-        if (post.data()["id"] == userId) {
-          final PostModel postModel = PostModel.fromMap(post.data());
-          showPosts.add(postModel);
-        } else {
-          continue;
+        for (String eachPost in postsInModel) {
+          if (eachPost == post.data()["id"]) {
+            PostModel postModel = PostModel.fromMap(post.data());
+
+            showPosts.add(postModel);
+          } else {
+            continue;
+          }
         }
       }
 
       showPosts.sort((a, b) {
-        return int.parse(b.creationData.toString()) -
-            int.parse(a.creationData.toString());
+        return int.parse(b.creationData.millisecond.toString()) -
+            int.parse(a.creationData.millisecond.toString());
       });
+
+      log("${showPosts.length}");
 
       return Left(showPosts);
     } on Exception catch (e) {
@@ -162,6 +177,42 @@ class PostServieces implements PostRepo {
       return Right(MainFailures(
           error: e.toString(), failureType: MyAppFilures.clientFailure));
     }
-    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<List<GlobalFeed>, MainFailures>> getAllPostFeeds() async {
+    try {
+      final postCollection =
+          await FirebaseFirestore.instance.collection(Collections.post).get();
+      final userCollection =
+          await FirebaseFirestore.instance.collection(Collections.users).get();
+
+      final posts = postCollection.docs.toList();
+      final users = userCollection.docs.toList();
+
+      List<GlobalFeed> allPosts = [];
+      posts.forEach((post) async {
+        users.forEach((user) async {
+          final PostModel postModel = PostModel.fromMap(post.data());
+          final UserModel userModel = UserModel.fromMap(user.data());
+
+          if (userModel.posts.contains(postModel.id)) {
+            allPosts
+                .add(GlobalFeed(postModel: postModel, userModel: userModel));
+          }
+        });
+      });
+
+      log(allPosts.length.toString());
+      return Left(allPosts);
+    } on Exception catch (e) {
+      log(e.toString());
+      return Right(MainFailures(
+          error: e.toString(), failureType: MyAppFilures.clientFailure));
+    } catch (e) {
+      log(e.toString());
+      return Right(MainFailures(
+          error: e.toString(), failureType: MyAppFilures.clientFailure));
+    }
   }
 }

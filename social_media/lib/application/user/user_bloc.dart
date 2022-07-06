@@ -34,5 +34,22 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         },
       );
     });
+    on<GetUserWithId>((event, emit) async {
+      emit(state.copyWith(status: UserEnums.loading));
+
+      final responseData = await _userServices.getUeserWithId(id: event.userId);
+
+      responseData.fold(
+        (model) {
+          emit(state.copyWith(status: UserEnums.success, model: model));
+        },
+        (failure) {
+          emit(state.copyWith(
+              status: UserEnums.error,
+              failure: MainFailures(
+                  failureType: failure.failureType, error: failure.error)));
+        },
+      );
+    });
   }
 }

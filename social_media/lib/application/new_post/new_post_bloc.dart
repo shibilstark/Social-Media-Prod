@@ -62,7 +62,10 @@ class NewPostBloc extends Bloc<NewPostEvent, NewPostState> {
           emit(state.copyWith(status: NewPostEnum.fileUploaded, task: task));
         },
         (error) {
-          emit(state.copyWith(status: NewPostEnum.fileUploadError));
+          emit(state.copyWith(
+              status: NewPostEnum.fileUploadError,
+              failure: MainFailures(
+                  failureType: error.failureType, error: error.error)));
         },
       );
     });

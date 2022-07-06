@@ -9,6 +9,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:social_media/application/accounts/create_account/create_account_bloc.dart';
 import 'package:social_media/application/accounts/login/login_bloc.dart';
 import 'package:social_media/application/accounts/verification/verification_bloc.dart';
+import 'package:social_media/application/get_post/get_post_bloc.dart';
 import 'package:social_media/application/new_post/new_post_bloc.dart';
 import 'package:social_media/application/theme/theme_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
@@ -66,6 +67,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<NewPostBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<GetPostBloc>(),
         ),
       ],
       child: ScreenUtilInit(

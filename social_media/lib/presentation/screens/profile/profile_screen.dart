@@ -5,9 +5,11 @@ import 'package:social_media/application/user/user_bloc.dart';
 import 'package:social_media/application/user/user_enums/user_enums.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
+import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/presentation/screens/new_post/new_post_modal.dart';
 import 'package:social_media/presentation/screens/post/post_texture..dart';
 import 'package:social_media/presentation/screens/profile/widgets/profile_part.dart';
+import 'package:social_media/presentation/screens/profile/widgets/profile_posts_section.dart';
 import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
 
 import 'package:social_media/presentation/widgets/gap.dart';
@@ -109,16 +111,7 @@ class ProfileBody extends StatelessWidget {
                     Divider(
                       color: primaryBlue,
                     ),
-                    ListView.separated(
-                      separatorBuilder: (context, index) => Gap(
-                        H: 10.sm,
-                      ),
-                      physics: NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) => PostTexture(),
-                      itemCount: model.posts.length,
-                    ),
+                    ProfilePostsSection(),
                   ],
                 ),
               )
