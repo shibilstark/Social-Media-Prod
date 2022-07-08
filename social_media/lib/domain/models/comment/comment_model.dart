@@ -1,31 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:hive_flutter/adapters.dart';
-
 class PostComment {
-  final String commenterId;
-  final DateTime date;
+  final String reacterId;
   final String commentText;
-
-  PostComment({
-    required this.commenterId,
-    required this.date,
-    required this.commentText,
-  });
+  PostComment({required this.reacterId, required this.commentText});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'commenterId': commenterId,
-      'date': date.millisecondsSinceEpoch,
+      'reacterId': reacterId,
       'commentText': commentText,
     };
   }
 
   factory PostComment.fromMap(Map<String, dynamic> map) {
     return PostComment(
-      commenterId: map['commenterId'] as String,
-      date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
+      reacterId: map['reacterId'] as String,
       commentText: map['commentText'] as String,
     );
   }

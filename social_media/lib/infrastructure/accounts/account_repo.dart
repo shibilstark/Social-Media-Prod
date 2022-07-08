@@ -11,4 +11,5 @@ abstract class AccountRepo {
   Future<Either<bool, MainFailures>> sendVerifiacationEmail(
       {required String email});
   Future<Either<bool, MainFailures>> verifyEmail({required String email});
+  Future<Either<bool, MainFailures>> checkEmailVerified();
 }

@@ -84,9 +84,9 @@ class UserModel {
       creationDate:
           DateTime.fromMillisecondsSinceEpoch(map['creationDate'] as int),
       isEmailVerified: map['isEmailVerified'] as bool,
-      followers: List<String>.from((map['followers']) as List<dynamic>),
-      following: List<String>.from((map['following']) as List<dynamic>),
-      posts: List<String>.from((map['posts']) as List<dynamic>),
+      followers: List<String>.from((map['followers']) as List),
+      following: List<String>.from((map['following']) as List),
+      posts: List<String>.from((map['posts']) as List),
       discription: map['discription'] as String,
       profileImage: map['profileImage'] as String,
     );

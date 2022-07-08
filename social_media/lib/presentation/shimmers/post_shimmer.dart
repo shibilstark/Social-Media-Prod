@@ -83,13 +83,13 @@ class PostTExtureLoading extends StatelessWidget {
               ),
             ],
           ),
-          Gap(
-            H: 10.sm,
-          ),
-          ShimmerBasicRectangleWidget(
-            H: 60.sm,
-            W: double.infinity,
-          )
+          // Gap(
+          //   H: 10.sm,
+          // ),
+          // ShimmerBasicRectangleWidget(
+          //   H: 60.sm,
+          //   W: double.infinity,
+          // )
         ],
       ),
     );

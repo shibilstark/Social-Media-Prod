@@ -11,3 +11,5 @@ class Verify extends VerificationEvent {
 }
 
 class ResendEmail extends VerificationEvent {}
+
+// class CheckVerified extends VerificationEvent {}

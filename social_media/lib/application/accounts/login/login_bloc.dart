@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:injectable/injectable.dart';
 import 'package:social_media/application/accounts/auth_enums/bloc_enums.dart';
+import 'package:social_media/domain/db/user_data/user_data.dart';
 import 'package:social_media/domain/failures/main_failures.dart';
+import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/infrastructure/accounts/account_repo.dart';
 
 part 'login_event.dart';
@@ -30,6 +33,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             emit(state.copyWith(status: AuthEnum.emailVerified));
           } else {
             emit(state.copyWith(status: AuthEnum.emailNotVerified));
+            Fluttertoast.showToast(
+                msg:
+                    "We Have send an email to ${Global.USER_DATA.email} please check your email and verify");
+            _accountServices.sendVerifiacationEmail(
+                email: Global.USER_DATA.email);
           }
         },
         (failure) {
@@ -43,7 +51,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
     on<LoggedOut>((event, emit) async {
-      await _accountServices.logOut();
+      emit(state.copyWith(status: AuthEnum.loading));
+      await UserDataStore.clearUserData();
       emit(state.copyWith(status: AuthEnum.succes));
     });
   }

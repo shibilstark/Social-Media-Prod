@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 final maxWidth = 998.sm;
 
-final constPadding = EdgeInsets.symmetric(vertical: 5.sm, horizontal: 5.sm);
+final constPadding = EdgeInsets.symmetric(vertical: 15.sm, horizontal: 15.sm);
 final postScreenPadding =
     EdgeInsets.symmetric(vertical: 5.sm, horizontal: 15.sm);
 

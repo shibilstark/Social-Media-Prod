@@ -111,7 +111,7 @@ class CustomTextFieldForPassword extends StatelessWidget {
             validator: (value) {
               return value != null && isValid(value: value)
                   ? null
-                  : "Enter A Valid ${type}";
+                  : "Enter A Valid  ${type}";
             },
             obscureText: _valueNotifier.value,
             keyboardType: inputType,
@@ -137,7 +137,7 @@ class CustomTextFieldForPassword extends StatelessWidget {
                 Icons.lock,
                 color: pureWhite,
               ),
-              hintText: type,
+              hintText: type == "Login Password" ? "Password" : type,
               contentPadding:
                   EdgeInsets.symmetric(vertical: 18.sm, horizontal: 10.sm),
               hintStyle: Theme.of(context)

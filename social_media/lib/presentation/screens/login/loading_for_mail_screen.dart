@@ -30,107 +30,95 @@ class LoadingForMailScreen extends StatelessWidget {
               child: Center(
                 child: Padding(
                   padding: constPadding,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: 250.sm,
-                        child:
-                            // state.status == AuthEnum.sendingEmail
-                            //     ?
-                            Column(
-                          children: [
-                            Text(
-                              "Conform Email",
-                              style: TextStyle(
-                                  fontSize: 25.sm,
-                                  fontWeight: FontWeight.bold,
-                                  color: pureWhite),
+                  child: BlocConsumer<VerificationBloc, VerificationState>(
+                    listener: (context, state) {
+                      if (state.status == AuthEnum.emailVerified) {
+                        Navigator.of(context).pushReplacementNamed("/home");
+                      }
+                    },
+                    builder: (context, state) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            width: 250.sm,
+                            child:
+                                // state.status == AuthEnum.sendingEmail
+                                //     ?
+                                Column(
+                              children: [
+                                Text(
+                                  "Conform Email",
+                                  style: TextStyle(
+                                      fontSize: 25.sm,
+                                      fontWeight: FontWeight.bold,
+                                      color: pureWhite),
+                                ),
+
+                                // Lottie.asset(
+                                //     "assets/lottie/lf30_editor_vw2ysryk.json"),
+                                SvgPicture.asset(
+                                  "assets/svg/undraw_opened_re_i38e.svg",
+                                  height: 500.sm,
+                                )
+                              ],
                             ),
-
-                            // Lottie.asset(
-                            //     "assets/lottie/lf30_editor_vw2ysryk.json"),
-                            SvgPicture.asset(
-                              "assets/svg/undraw_opened_re_i38e.svg",
-                              height: 400.sm,
-                            )
-                          ],
-                        ),
-                      ),
-                      Gap(
-                        H: 30.sm,
-                      ),
-                      BlocConsumer<VerificationBloc, VerificationState>(
-                        listener: (context, state) {
-                          if (state.status == AuthEnum.emailVerified) {
-                            Navigator.of(context).pushReplacementNamed("/home");
-                          }
-
-                          if (state.status == AuthEnum.error) {
-                            Util.showNormalCoolAlerr(
-                                context: context,
-                                type: CoolAlertType.error,
-                                okString: "Close",
-                                text: state.failure!.error);
-                          }
-                          if (state.status == AuthEnum.emailSend) {
-                            Fluttertoast.showToast(
-                                msg: "We send an email to your account");
-                          }
-                        },
-                        builder: (context, state) {
-                          return Column(
-                            children: [
-                              SizedBox(
-                                width: 300.sm,
-                                height: 50.sm,
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                        context
-                                            .read<VerificationBloc>()
-                                            .add(Verify());
-                                      });
-                                    },
-                                    child: Text(
-                                      "Verify",
-                                      style:
-                                          Theme.of(context).textTheme.bodySmall,
-                                    )),
+                          ),
+                          Gap(
+                            H: 30.sm,
+                          ),
+                          SizedBox(
+                            width: 200.sm,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(pureWhite),
+                                foregroundColor:
+                                    MaterialStateProperty.all(darkBg),
                               ),
-                              Gap(
-                                H: 30.sm,
+                              onPressed: () {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  context
+                                      .read<VerificationBloc>()
+                                      .add(Verify());
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    state.status == AuthEnum.loading
+                                        ? "Verifyin"
+                                        : "Verify",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.sm),
+                                  ),
+                                  state.status == AuthEnum.loading
+                                      ? LimitedBox(
+                                          child: Row(
+                                            children: [
+                                              Gap(W: 10.sm),
+                                              SizedBox(
+                                                height: 20.sm,
+                                                width: 20.sm,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  strokeWidth: 1.sm,
+                                                  color: darkBlue,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                ],
                               ),
-                              SizedBox(
-                                width: 300.sm,
-                                height: 50.sm,
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                        context
-                                            .read<VerificationBloc>()
-                                            .add(ResendEmail());
-                                      });
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Send Verification Email",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall,
-                                        ),
-                                      ],
-                                    )),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
+                            ),
+                          )
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),
