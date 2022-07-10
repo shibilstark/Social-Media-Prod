@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:social_media/application/accounts/auth_enums/bloc_enums.dart';
-import 'package:social_media/application/accounts/create_account/create_account_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_media/application/auth/auth_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/app_constant_strings.dart';
 import 'package:social_media/core/constants/constants.dart';
-import 'package:social_media/core/controllers/text_editing_controllers.dart';
+import 'package:social_media/core/controllers/text_controllers.dart';
+
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
 import 'package:social_media/presentation/widgets/custom_text_field.dart';
@@ -113,21 +114,14 @@ class SignUpActionButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CreateAccountBloc, CreateAccountState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state.state == AuthStateValue.succes) {
-          Util.showCoolAlertFromSignUpToLogin(
-              context: context,
-              type: CoolAlertType.success,
-              okString: "OK",
-              text: "Successfully Created Account Pls Login");
-        }
-        if (state.state == AuthStateValue.error) {
-          Util.showNormalCoolAlerr(
-              context: context,
-              type: CoolAlertType.error,
-              okString: "Close",
-              text: state.failure!.error);
+        if (state is AuthStateAccountCreateSuccess) {
+          Navigator.of(context).pushReplacementNamed('/login');
+          Fluttertoast.showToast(
+              msg: "Account Created Successfully Please Login");
+        } else if (state is AuthStateAccountCreateError) {
+          Fluttertoast.showToast(msg: state.err.toString());
         }
       },
       builder: (context, state) {
@@ -141,25 +135,25 @@ class SignUpActionButtonWidget extends StatelessWidget {
                   final userId = const Uuid();
                   final currentDateTime = DateTime.now();
                   final UserModel model = UserModel(
-                      name: TextFieldAuthenticationController.signupName.text
-                          .trim()
-                          .capitalizeFirst(),
-                      email: TextFieldAuthenticationController.signupEmail.text
-                          .trim(),
-                      isAgreed: true,
-                      isPrivate: false,
-                      isBlocked: false,
-                      creationDate: currentDateTime,
-                      userId: userId.v4(),
-                      discription: profileDiscriptionAuto,
-                      followers: [],
-                      following: [],
-                      posts: [],
-                      profileImage: "",
-                      coverImage: "",
-                      isEmailVerified: false);
+                    name: TextFieldAuthenticationController.signupName.text
+                        .trim()
+                        .capitalizeFirst(),
+                    email: TextFieldAuthenticationController.signupEmail.text
+                        .trim(),
+                    isAgreed: true,
+                    isPrivate: false,
+                    isBlocked: false,
+                    creationDate: currentDateTime,
+                    userId: userId.v4(),
+                    discription: profileDiscriptionAuto,
+                    followers: [],
+                    following: [],
+                    posts: [],
+                    profileImage: "",
+                    coverImage: "",
+                  );
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    context.read<CreateAccountBloc>().add(AccountCreated(
+                    context.read<AuthBloc>().add(CreateAccount(
                         model: model,
                         password: TextFieldAuthenticationController
                             .signupPassword.text
@@ -170,9 +164,9 @@ class SignUpActionButtonWidget extends StatelessWidget {
               child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 15.sm, horizontal: 50.sm),
-                  child: state.state == AuthStateValue.loading &&
-                          state.state != AuthStateValue.succes &&
-                          state.state != AuthStateValue.error
+                  child: state is AuthStateLoading &&
+                          state is! AuthStateAccountCreateError &&
+                          state is! AuthStateAccountCreateSuccess
                       ? SizedBox(
                           height: 20.sm,
                           width: 20.sm,

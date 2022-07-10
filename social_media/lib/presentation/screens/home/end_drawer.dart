@@ -1,20 +1,14 @@
 import 'dart:ui';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:social_media/application/accounts/auth_enums/bloc_enums.dart';
-import 'package:social_media/application/accounts/login/login_bloc.dart';
-import 'package:social_media/application/current_user/current_user_bloc.dart';
-import 'package:social_media/application/current_user/user_state_enum/user_state_enum.dart';
 import 'package:social_media/application/theme/theme_bloc.dart';
+import 'package:social_media/application/user/user_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/presentation/routes/app_router.dart';
 import 'package:social_media/presentation/shimmers/profile_part_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
-import 'package:social_media/utility/util.dart';
 import '../../../core/constants/enums.dart';
 
 class EndDrawer extends StatelessWidget {
@@ -22,11 +16,6 @@ class EndDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context
-          .read<CurrentUserBloc>()
-          .add(FetchUser(userId: Global.USER_DATA.id, shouldLoad: false));
-    });
     return SafeArea(
       child: ClipRRect(
         borderRadius: BorderRadius.only(
@@ -38,7 +27,7 @@ class EndDrawer extends StatelessWidget {
             filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
             child: Column(
               children: [
-                EndDrawerMiniProfile(),
+                const EndDrawerMiniProfile(),
                 Container(
                   padding: EdgeInsets.all(20.sm),
                   child: Column(
@@ -130,7 +119,7 @@ class EndDrawer extends StatelessWidget {
                         whereTo: Scaffold(),
                       ),
                       const Divider(),
-                      LogOutTile(),
+                      const LogOutTile(),
                       const Divider(
                         color: primary,
                       ),
@@ -161,64 +150,59 @@ class EndDrawerMiniProfile extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(20.sm),
         color: primaryBlue,
-        child: BlocConsumer<CurrentUserBloc, CurrentUserState>(
-          listener: (context, state) {
-            if (state.status == UserStatesValues.error) {
-              Util.showNormalCoolAlerr(
-                  context: context,
-                  type: CoolAlertType.error,
-                  okString: "Close",
-                  text: state.failure!.error);
-            }
-          },
+        child: BlocConsumer<UserBloc, UserState>(
+          listener: (context, state) {},
           builder: (context, state) {
-            if (state.data != null &&
-                state.status == UserStatesValues.success) {
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 30.sm,
-                    backgroundColor: secondaryBlue,
-                    backgroundImage: AssetImage("assets/dummy/dummyDP.png"),
-                  ),
-                  Gap(
-                    W: 10.sm,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        // user == null ? "" : user.name,
-                        "JhoneFeverough",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                fontSize: 17.sm,
-                                fontWeight: FontWeight.w500,
-                                color: pureWhite),
-                      ),
-                      Gap(
-                        H: 3.sm,
-                      ),
-                      Text(
-                        // user == null ? "" : user.email,
-                        "jhonefeverogh@gmail.com",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: pureWhite.withOpacity(0.7),
-                              fontSize: 12.sm,
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            } else {
-              return ProfilePartLoading();
+            if (state is UserStateLoading || state is UserInitial) {
+              return const ProfilePartLoading();
             }
+
+            if (state is FetchCurrentUserError) {
+              return Text(
+                "OOPS",
+                style: TextStyle(color: pureWhite, fontSize: 30.sm),
+              );
+            }
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 25.sm,
+                  backgroundColor: secondaryBlue,
+                  backgroundImage: const AssetImage("assets/dummy/dummyDP.png"),
+                ),
+                Gap(
+                  W: 10.sm,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      // user == null ? "" : user.name,
+                      "JhoneFeverough",
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontSize: 17.sm,
+                          fontWeight: FontWeight.w500,
+                          color: pureWhite),
+                    ),
+                    Gap(
+                      H: 3.sm,
+                    ),
+                    Text(
+                      // user == null ? "" : user.email,
+                      "jhonefeverogh@gmail.com",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: pureWhite.withOpacity(0.7),
+                            fontSize: 12.sm,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                  ],
+                ),
+              ],
+            );
           },
         ),
       ),
@@ -233,57 +217,36 @@ class LogOutTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
-      if (state.status == AuthStateValue.succes) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil("/login", (Route<dynamic> route) => false);
-      }
-    }, builder: (context, state) {
-      return Builder(
-        builder: (context) {
-          return GestureDetector(
-              onTap: () async {
-                await CoolAlert.show(
-                    showCancelBtn: true,
-                    backgroundColor: primary,
-                    context: context,
-                    type: CoolAlertType.warning,
-                    text: "Are you sure",
-                    confirmBtnText: state.status == AuthStateValue.loading
-                        ? "loggin Out"
-                        : "Log Out",
-                    onConfirmBtnTap: () {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        context.read<LoginBloc>().add(LoggedOut());
-                        Fluttertoast.showToast(msg: "Logged Out Seccessfully");
-                      });
-                    });
-              },
-              child: SizedBox(
-                height: 35.sm,
-                child: Row(
-                  children: [
-                    IconTheme(
-                        data: Theme.of(context).iconTheme,
-                        child: Icon(
-                          Icons.logout,
-                          size: 20,
-                        )),
-                    Gap(
-                      W: 10.sm,
-                    ),
-                    Text(
-                      "Log Out",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontSize: 18.sm, fontWeight: FontWeight.w400),
-                      //   ),
-                    ),
-                  ],
-                ),
-              ));
-        },
-      );
-    });
+    return Builder(
+      builder: (context) {
+        return GestureDetector(
+            onTap: () async {},
+            child: SizedBox(
+              height: 35.sm,
+              child: Row(
+                children: [
+                  IconTheme(
+                      data: Theme.of(context).iconTheme,
+                      child: const Icon(
+                        Icons.logout,
+                        size: 20,
+                      )),
+                  Gap(
+                    W: 10.sm,
+                  ),
+                  Text(
+                    "Log Out",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(fontSize: 18.sm, fontWeight: FontWeight.w400),
+                    //   ),
+                  ),
+                ],
+              ),
+            ));
+      },
+    );
   }
 }
 

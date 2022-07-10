@@ -2,56 +2,37 @@
 
 import 'dart:convert';
 
-import 'package:hive_flutter/adapters.dart';
+// part 'user_model.g.dart';
 
-part 'user_model.g.dart';
-
-@HiveType(typeId: 1)
 class UserModel {
-  @HiveField(0)
   String userId;
-  @HiveField(1)
   String name;
-  @HiveField(2)
   String email;
-  @HiveField(3)
   String coverImage;
-  @HiveField(4)
   bool isAgreed;
-  @HiveField(5)
   bool isPrivate;
-  @HiveField(6)
   bool isBlocked;
-  @HiveField(7)
   DateTime creationDate;
-  @HiveField(8)
-  bool isEmailVerified;
-  @HiveField(9)
-  List<String> followers;
-  @HiveField(10)
-  List<String> following;
-  @HiveField(11)
-  List<String> posts;
-  @HiveField(12)
-  String discription;
-  @HiveField(13)
   String profileImage;
-
-  UserModel(
-      {required this.userId,
-      required this.name,
-      required this.email,
-      required this.isAgreed,
-      required this.isPrivate,
-      required this.isBlocked,
-      required this.creationDate,
-      required this.followers,
-      required this.following,
-      required this.posts,
-      required this.discription,
-      required this.profileImage,
-      required this.coverImage,
-      required this.isEmailVerified});
+  List<String> followers;
+  List<String> following;
+  List<String> posts;
+  String discription;
+  UserModel({
+    required this.userId,
+    required this.name,
+    required this.email,
+    required this.isAgreed,
+    required this.isPrivate,
+    required this.isBlocked,
+    required this.creationDate,
+    required this.followers,
+    required this.following,
+    required this.posts,
+    required this.discription,
+    required this.profileImage,
+    required this.coverImage,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -63,7 +44,6 @@ class UserModel {
       'isPrivate': isPrivate,
       'isBlocked': isBlocked,
       'creationDate': creationDate.millisecondsSinceEpoch,
-      'isEmailVerified': isEmailVerified,
       'followers': followers,
       'following': following,
       'posts': posts,
@@ -83,7 +63,6 @@ class UserModel {
       isBlocked: map['isBlocked'] as bool,
       creationDate:
           DateTime.fromMillisecondsSinceEpoch(map['creationDate'] as int),
-      isEmailVerified: map['isEmailVerified'] as bool,
       followers: List<String>.from((map['followers']) as List),
       following: List<String>.from((map['following']) as List),
       posts: List<String>.from((map['posts']) as List),
@@ -106,7 +85,6 @@ class UserModel {
     bool? isPrivate,
     bool? isBlocked,
     DateTime? creationDate,
-    bool? isEmailVerified,
     List<String>? followers,
     List<String>? following,
     List<String>? posts,
@@ -122,7 +100,6 @@ class UserModel {
       isPrivate: isPrivate ?? this.isPrivate,
       isBlocked: isBlocked ?? this.isBlocked,
       creationDate: creationDate ?? this.creationDate,
-      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       followers: followers ?? this.followers,
       following: following ?? this.following,
       posts: posts ?? this.posts,
@@ -141,7 +118,6 @@ class UmKeys {
   static const String isPrivate = "isPrivate";
   static const String isBlocked = "isBlocked";
   static const String creationDate = "creationDate";
-  static const String isEmailVerified = "isEmailVerified";
   static const String followers = "followers";
   static const String following = "following";
   static const String posts = "posts";

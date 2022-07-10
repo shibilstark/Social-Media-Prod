@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_media/presentation/screens/edit_profile/edit_profile_screen.dart';
 import 'package:social_media/presentation/screens/home/home_screen.dart';
-import 'package:social_media/presentation/screens/login/loading_for_mail_screen.dart';
 import 'package:social_media/presentation/screens/login/login_screen.dart';
 import 'package:social_media/presentation/screens/media_view/media_view_screen.dart';
 import 'package:social_media/presentation/screens/new_post_screen/upload_post.dart';
@@ -27,10 +26,9 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => SignUpScreen());
       case "/home":
         return MaterialPageRoute(builder: (_) => HomeScreen());
-      case "/verifyemail":
-        return MaterialPageRoute(builder: (_) => LoadingForMailScreen());
-      case "/uploadpost":
-        return MaterialPageRoute(builder: (_) => UploadPostScreen());
+
+      // case "/uploadpost":
+      //   return MaterialPageRoute(builder: (_) => UploadPostScreen());
       case "/editprofile":
         final args = routSettings.arguments as ScreenArgs;
         return MaterialPageRoute(

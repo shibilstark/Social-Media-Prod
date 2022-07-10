@@ -26,16 +26,17 @@ class UserServices implements UserRepo {
 
       final posts = postCollection.docs.toList();
       final List<PostModel> showPosts = [];
+      if (postsInModel.isNotEmpty) {
+        for (var post in posts) {
+          for (String eachPost in postsInModel) {
+            log(post.id);
+            if (eachPost == post.data()['postId']) {
+              PostModel postModel = PostModel.fromMap(post.data());
 
-      for (var post in posts) {
-        for (String eachPost in postsInModel) {
-          log(post.id);
-          if (eachPost == post.data()['postId']) {
-            PostModel postModel = PostModel.fromMap(post.data());
-
-            showPosts.add(postModel);
-          } else {
-            continue;
+              showPosts.add(postModel);
+            } else {
+              continue;
+            }
           }
         }
 
@@ -49,11 +50,12 @@ class UserServices implements UserRepo {
 
       return Left(feed);
     } on FirebaseException catch (e) {
-      e.toString();
+      log(e.toString());
+
       return Right(MainFailures(
           error: e.code.toString(), failureType: MyAppFilures.firebaseFailure));
     } catch (e) {
-      e.toString();
+      log(e.toString());
       return Right(MainFailures(
           error: e.toString(), failureType: MyAppFilures.firebaseFailure));
     }

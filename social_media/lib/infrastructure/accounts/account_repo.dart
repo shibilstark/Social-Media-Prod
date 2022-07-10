@@ -8,8 +8,4 @@ abstract class AccountRepo {
   Future<Either<UserModel, MainFailures>> logOut();
   Future<Either<UserModel, MainFailures>> login(
       {required String email, required String password});
-  Future<Either<bool, MainFailures>> sendVerifiacationEmail(
-      {required String email});
-  Future<Either<bool, MainFailures>> verifyEmail({required String email});
-  Future<Either<bool, MainFailures>> checkEmailVerified();
 }

@@ -6,12 +6,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:social_media/application/accounts/create_account/create_account_bloc.dart';
-import 'package:social_media/application/accounts/login/login_bloc.dart';
-import 'package:social_media/application/accounts/verification/verification_bloc.dart';
-import 'package:social_media/application/current_user/current_user_bloc.dart';
-import 'package:social_media/application/new_post/new_post_bloc.dart';
+import 'package:social_media/application/auth/auth_bloc.dart';
 import 'package:social_media/application/theme/theme_bloc.dart';
+import 'package:social_media/application/upload_post/upload_post_bloc.dart';
+import 'package:social_media/application/user/user_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/domain/db/user_data/user_data.dart';
@@ -52,19 +50,13 @@ class MyApp extends StatelessWidget {
           create: (context) => ThemeBloc(),
         ),
         BlocProvider(
-          create: (context) => getIt<LoginBloc>(),
+          create: (context) => getIt<AuthBloc>(),
         ),
         BlocProvider(
-          create: (context) => getIt<VerificationBloc>(),
+          create: (context) => getIt<UserBloc>(),
         ),
         BlocProvider(
-          create: (context) => getIt<CreateAccountBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<CurrentUserBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<NewPostBloc>(),
+          create: (context) => getIt<UploadPostBloc>(),
         ),
       ],
       child: ScreenUtilInit(

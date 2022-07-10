@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,18 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:social_media/application/accounts/auth_enums/bloc_enums.dart';
-import 'package:social_media/application/accounts/login/login_bloc.dart';
+import 'package:social_media/application/auth/auth_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
-import 'package:social_media/core/controllers/text_editing_controllers.dart';
-
+import 'package:social_media/core/controllers/text_controllers.dart';
 import 'package:social_media/core/themes/themes.dart';
 import 'package:social_media/presentation/widgets/custom_text_field.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 import 'package:social_media/utility/util.dart';
-
-import '../../../application/accounts/verification/verification_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -94,21 +92,15 @@ class LoginActionButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: BlocConsumer<LoginBloc, LoginState>(
+      child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state.status == AuthStateValue.emailVerified) {
+          if (state is AuthStateLogginSuccess) {
+            log("AuthStateLogginSuccess");
             Navigator.of(context).pushReplacementNamed("/home");
-            Fluttertoast.showToast(msg: "Logged in Successfully");
-          }
-          if (state.status == AuthStateValue.emailNotVerified) {
-            Navigator.of(context).pushReplacementNamed("/verifyemail");
-          }
-          if (state.status == AuthStateValue.error) {
-            Util.showNormalCoolAlerr(
-                context: context,
-                type: CoolAlertType.error,
-                okString: "Close",
-                text: state.failure!.error);
+            Fluttertoast.showToast(msg: "Loging in");
+          } else if (state is AuthStateLogginError) {
+            log("AuthStateLogginError");
+            Fluttertoast.showToast(msg: state.error.toString());
           }
         },
         builder: (context, state) {
@@ -128,7 +120,7 @@ class LoginActionButtonWidget extends StatelessWidget {
 
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       context
-                          .read<LoginBloc>()
+                          .read<AuthBloc>()
                           .add(LoggedIn(email: email, password: password));
                     });
                   }
@@ -136,10 +128,9 @@ class LoginActionButtonWidget extends StatelessWidget {
                 child: Padding(
                     padding: EdgeInsets.symmetric(
                         vertical: 15.sm, horizontal: 50.sm),
-                    child: state.status == AuthStateValue.loading &&
-                            state.status != AuthStateValue.emailVerified &&
-                            state.status != AuthStateValue.emailNotVerified &&
-                            state.status != AuthStateValue.error
+                    child: state is AuthStateLoading &&
+                            state is! AuthStateLogginSuccess &&
+                            state is! AuthStateLogginError
                         ? SizedBox(
                             height: 20.sm,
                             width: 20.sm,
