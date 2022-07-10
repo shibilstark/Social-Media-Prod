@@ -115,14 +115,14 @@ class SignUpActionButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<CreateAccountBloc, CreateAccountState>(
       listener: (context, state) {
-        if (state.state == AuthEnum.succes) {
+        if (state.state == AuthStateValue.succes) {
           Util.showCoolAlertFromSignUpToLogin(
               context: context,
               type: CoolAlertType.success,
               okString: "OK",
               text: "Successfully Created Account Pls Login");
         }
-        if (state.state == AuthEnum.error) {
+        if (state.state == AuthStateValue.error) {
           Util.showNormalCoolAlerr(
               context: context,
               type: CoolAlertType.error,
@@ -170,9 +170,9 @@ class SignUpActionButtonWidget extends StatelessWidget {
               child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 15.sm, horizontal: 50.sm),
-                  child: state.state == AuthEnum.loading &&
-                          state.state != AuthEnum.succes &&
-                          state.state != AuthEnum.error
+                  child: state.state == AuthStateValue.loading &&
+                          state.state != AuthStateValue.succes &&
+                          state.state != AuthStateValue.error
                       ? SizedBox(
                           height: 20.sm,
                           width: 20.sm,

@@ -3,9 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media/core/colors/colors.dart';
+import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
-import 'package:social_media/presentation/screens/profile/profile_screen.dart';
+import 'package:social_media/presentation/routes/app_router.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
+
+final dummyProfilePicture = "assets/dummy/dummyDP.png";
 
 class InnerProfilePartInheritedWidget extends InheritedWidget {
   final Widget widget;
@@ -77,28 +80,52 @@ class InnerProfilePart extends StatelessWidget {
                     // crossAxisAlignment: CrossAxisAlignment.center,
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      model.profileImage == ""
-                          ? CircleAvatar(
-                              radius: 65.sm,
-                              backgroundColor: darkBlue,
-                              child: CircleAvatar(
-                                backgroundImage:
-                                    AssetImage("assets/dummy/dummyDP.png"),
-                                radius: 60.sm,
-                                backgroundColor: secondaryBlue,
-                              ),
-                            )
-                          : CircleAvatar(
-                              radius: 65.sm,
-                              backgroundColor: darkBlue,
-                              child: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(model.profileImage),
-                                radius: 60.sm,
-                                backgroundColor: secondaryBlue,
+                      Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          model.profileImage == ""
+                              ? CircleAvatar(
+                                  radius: 65.sm,
+                                  backgroundColor: darkBlue,
+                                  child: CircleAvatar(
+                                    backgroundImage:
+                                        AssetImage(dummyProfilePicture),
+                                    radius: 60.sm,
+                                    backgroundColor: secondaryBlue,
+                                  ),
+                                )
+                              : CircleAvatar(
+                                  radius: 65.sm,
+                                  backgroundColor: darkBlue,
+                                  child: CircleAvatar(
+                                    backgroundImage:
+                                        NetworkImage(model.profileImage),
+                                    radius: 60.sm,
+                                    backgroundColor: secondaryBlue,
+                                  ),
+                                ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushNamed("/editprofile",
+                                  arguments:
+                                      ScreenArgs(args: {'userModel': model}));
+                            },
+                            child: Container(
+                              height: 28.sm,
+                              width: 28.sm,
+                              decoration: BoxDecoration(
+                                  color: primaryBlue,
+                                  borderRadius: BorderRadius.circular(5.sm)),
+                              child: Icon(
+                                Icons.edit,
+                                color: pureWhite,
+                                size: 16.sm,
                               ),
                             ),
-                      Spacer(),
+                          )
+                        ],
+                      ),
+                      const Spacer(),
                       LimitedBox(
                         child: Padding(
                           padding: EdgeInsets.only(top: 50.sm),
@@ -152,42 +179,59 @@ class InnerProfilePart extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                model.discription,
-                // maxLines: 3,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(fontSize: 15.sm),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  model.discription,
+                  // maxLines: 3,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(fontSize: 15.sm),
+                ),
               ),
-              Gap(
-                H: 10.sm,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: ElevatedButton(
-                    child: Text(
-                      "Follow",
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          fontSize: 15.sm, fontWeight: FontWeight.w500),
-                    ),
-                    onPressed: () {},
-                  )),
-                  Gap(
-                    W: 20.sm,
-                  ),
-                  Expanded(
-                      child: ElevatedButton(
-                    child: Text(
-                      "Message",
-                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          fontSize: 15.sm, fontWeight: FontWeight.w500),
-                    ),
-                    onPressed: () {},
-                  )),
-                ],
-              )
+              model.userId != Global.USER_DATA.id
+                  ? Column(
+                      children: [
+                        Gap(
+                          H: 10.sm,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                                child: ElevatedButton(
+                              child: Text(
+                                "Follow",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(
+                                        fontSize: 15.sm,
+                                        fontWeight: FontWeight.w500),
+                              ),
+                              onPressed: () {},
+                            )),
+                            Gap(
+                              W: 20.sm,
+                            ),
+                            Expanded(
+                                child: ElevatedButton(
+                              child: Text(
+                                "Message",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(
+                                        fontSize: 15.sm,
+                                        fontWeight: FontWeight.w500),
+                              ),
+                              onPressed: () {},
+                            )),
+                          ],
+                        ),
+                      ],
+                    )
+                  : SizedBox(),
             ],
           ),
         )

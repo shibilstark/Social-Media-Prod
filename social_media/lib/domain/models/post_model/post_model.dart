@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:social_media/domain/models/comment/comment_model.dart';
 import 'package:social_media/domain/models/post_report_model/reports_model.dart';
@@ -14,8 +13,7 @@ class PostModel {
   final List<PostComment> comments;
   final List<String> lights;
   final String type;
-  final String videoThumbnail;
-  final String imageFit;
+  final String? videoThumbnail;
   final String discription;
   final String tag;
   final List<ReportsModel> reports;
@@ -30,7 +28,6 @@ class PostModel {
     required this.lights,
     required this.type,
     required this.videoThumbnail,
-    required this.imageFit,
     required this.discription,
     required this.tag,
     required this.reports,
@@ -47,7 +44,6 @@ class PostModel {
       'lights': lights,
       'type': type,
       'videoThumbnail': videoThumbnail,
-      'imageFit': imageFit,
       'discription': discription,
       'tag': tag,
       'reports': reports.map((x) => x.toMap()).toList(),
@@ -69,7 +65,6 @@ class PostModel {
       lights: List<String>.from((map['lights']) as List<String>),
       type: map['type'] as String,
       videoThumbnail: map['videoThumbnail'] as String,
-      imageFit: map['imageFit'] as String,
       discription: map['discription'] as String,
       tag: map['tag'] as String,
       reports: List<ReportsModel>.from(
@@ -84,15 +79,39 @@ class PostModel {
 
   factory PostModel.fromJson(String source) =>
       PostModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  PostModel copyWith({
+    String? postId,
+    String? userId,
+    String? post,
+    DateTime? createdAt,
+    DateTime? laseEdit,
+    List<PostComment>? comments,
+    List<String>? lights,
+    String? type,
+    String? videoThumbnail,
+    String? discription,
+    String? tag,
+    List<ReportsModel>? reports,
+  }) {
+    return PostModel(
+      postId: postId ?? this.postId,
+      userId: userId ?? this.userId,
+      post: post ?? this.post,
+      createdAt: createdAt ?? this.createdAt,
+      laseEdit: laseEdit ?? this.laseEdit,
+      comments: comments ?? this.comments,
+      lights: lights ?? this.lights,
+      type: type ?? this.type,
+      videoThumbnail: videoThumbnail ?? this.videoThumbnail,
+      discription: discription ?? this.discription,
+      tag: tag ?? this.tag,
+      reports: reports ?? this.reports,
+    );
+  }
 }
 
 class PostType {
   static const String image = "image";
   static const String video = "video";
-}
-
-class PostImageFit {
-  static const String cover = "cover";
-  static const String fitHeight = "fitHeight";
-  static const String fill = "fill";
 }

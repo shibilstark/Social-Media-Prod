@@ -2,7 +2,7 @@
 part of 'create_account_bloc.dart';
 
 class CreateAccountState extends Equatable {
-  final AuthEnum state;
+  final String state;
   MainFailures? failure;
   UserModel? model;
   CreateAccountState({required this.state, required this.failure, this.model});
@@ -10,7 +10,7 @@ class CreateAccountState extends Equatable {
   List<Object?> get props => [state, failure, model];
 
   CreateAccountState copyWith(
-      {AuthEnum? state, MainFailures? failure, UserModel? model}) {
+      {String? state, MainFailures? failure, UserModel? model}) {
     return CreateAccountState(
       state: state ?? this.state,
       failure: failure ?? this.failure,
@@ -21,6 +21,6 @@ class CreateAccountState extends Equatable {
 
 class CreateAccountInitial extends CreateAccountState {
   CreateAccountInitial(
-      {required AuthEnum state, MainFailures? faulure, UserModel? model})
+      {required String state, MainFailures? faulure, UserModel? model})
       : super(state: state, failure: null, model: null);
 }

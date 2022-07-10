@@ -1,7 +1,7 @@
 part of 'login_bloc.dart';
 
 class LoginState extends Equatable {
-  final AuthEnum status;
+  final String status;
   final MainFailures? failure;
 
   const LoginState({
@@ -13,7 +13,7 @@ class LoginState extends Equatable {
   List<Object?> get props => [status, failure];
 
   LoginState copyWith({
-    AuthEnum? status,
+    String? status,
     MainFailures? failure,
   }) {
     return LoginState(
@@ -25,9 +25,9 @@ class LoginState extends Equatable {
 
 class LoginInitial extends LoginState {
   const LoginInitial({
-    required AuthEnum status,
+    required String status,
     MainFailures? failure,
-  }) : super(status: AuthEnum.initial, failure: null);
+  }) : super(status: AuthStateValue.initial, failure: null);
 
   @override
   List<Object?> get props => [status, failure];

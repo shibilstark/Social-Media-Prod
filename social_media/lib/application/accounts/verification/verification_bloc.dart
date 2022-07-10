@@ -1,13 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+
 import 'package:injectable/injectable.dart';
 import 'package:social_media/application/accounts/auth_enums/bloc_enums.dart';
 import 'package:social_media/domain/db/user_data/user_data.dart';
 import 'package:social_media/domain/failures/main_failures.dart';
-import 'package:social_media/domain/global/global_variables.dart';
+
 import 'package:social_media/infrastructure/accounts/account_repo.dart';
 
 part 'verification_event.dart';
@@ -17,9 +17,10 @@ part 'verification_state.dart';
 class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
   final AccountRepo _accountRepo;
   VerificationBloc(this._accountRepo)
-      : super(VerificationInitial(status: AuthEnum.initial, failure: null)) {
+      : super(const VerificationInitial(
+            status: AuthStateValue.initial, failure: null)) {
     on<Verify>((event, emit) async {
-      emit(state.copyWith(status: AuthEnum.loading));
+      emit(state.copyWith(status: AuthStateValue.loading));
 
       final userData = (await UserDataStore.getUserData());
 
@@ -28,9 +29,9 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
       result.fold(
         (status) {
           if (status) {
-            emit(state.copyWith(status: AuthEnum.emailVerified));
+            emit(state.copyWith(status: AuthStateValue.emailVerified));
           } else {
-            emit(state.copyWith(status: AuthEnum.emailNotVerified));
+            emit(state.copyWith(status: AuthStateValue.emailNotVerified));
             Fluttertoast.showToast(
                 msg: "Email Not Verified yet plaese Verify first");
             // _accountRepo.sendVerifiacationEmail(email: Global.USER_DATA.email);
@@ -38,7 +39,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
         },
         (failure) {
           emit(state.copyWith(
-              status: AuthEnum.error,
+              status: AuthStateValue.error,
               failure: MainFailures(
                   failureType: failure.failureType, error: failure.error)));
         },
@@ -46,7 +47,7 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
     });
 
     on<ResendEmail>((event, emit) async {
-      emit(state.copyWith(status: AuthEnum.loading));
+      emit(state.copyWith(status: AuthStateValue.loading));
 
       final userData = (await UserDataStore.getUserData())!;
 
@@ -56,12 +57,12 @@ class VerificationBloc extends Bloc<VerificationEvent, VerificationState> {
       result.fold(
         (status) {
           if (status) {
-            emit(state.copyWith(status: AuthEnum.emailSend));
+            emit(state.copyWith(status: AuthStateValue.emailSend));
           }
         },
         (failure) {
           emit(state.copyWith(
-              status: AuthEnum.error,
+              status: AuthStateValue.error,
               failure: MainFailures(
                   failureType: failure.failureType, error: failure.error)));
         },

@@ -5,7 +5,7 @@ import 'package:social_media/core/colors/colors.dart';
 class MyTheme {
   static ThemeData lightTheme = ThemeData(
       dividerColor: primaryBlue,
-      dialogTheme: DialogTheme(backgroundColor: primaryBlue),
+      dialogTheme: const DialogTheme(backgroundColor: primaryBlue),
       scaffoldBackgroundColor: smoothWhite,
       appBarTheme: const AppBarTheme(backgroundColor: primaryBlue),
       iconTheme: const IconThemeData(
@@ -22,7 +22,7 @@ class MyTheme {
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: primaryBlue.withOpacity(0.1),
+          backgroundColor: smoothWhite,
           elevation: 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -45,10 +45,10 @@ class MyTheme {
             fontSize: 14.sm, color: pureWhite, fontWeight: FontWeight.w400),
       ),
       bottomNavigationBarTheme:
-          BottomNavigationBarThemeData(backgroundColor: primaryBlue));
+          const BottomNavigationBarThemeData(backgroundColor: primaryBlue));
   static ThemeData darkTheme = ThemeData(
     dividerColor: softGrey,
-    dialogTheme: DialogTheme(backgroundColor: darkBg),
+    dialogTheme: const DialogTheme(backgroundColor: darkBg),
     scaffoldBackgroundColor: softBlack,
     appBarTheme: const AppBarTheme(backgroundColor: darkBg),
     iconTheme: const IconThemeData(
@@ -88,7 +88,7 @@ class MyTheme {
           fontSize: 14.sm, color: pureWhite, fontWeight: FontWeight.w400),
     ),
     bottomNavigationBarTheme:
-        BottomNavigationBarThemeData(backgroundColor: darkBg),
+        const BottomNavigationBarThemeData(backgroundColor: darkBg),
   );
 }
 

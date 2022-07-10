@@ -32,7 +32,7 @@ class LoadingForMailScreen extends StatelessWidget {
                   padding: constPadding,
                   child: BlocConsumer<VerificationBloc, VerificationState>(
                     listener: (context, state) {
-                      if (state.status == AuthEnum.emailVerified) {
+                      if (state.status == AuthStateValue.emailVerified) {
                         Navigator.of(context).pushReplacementNamed("/home");
                       }
                     },
@@ -42,7 +42,7 @@ class LoadingForMailScreen extends StatelessWidget {
                           SizedBox(
                             width: 250.sm,
                             child:
-                                // state.status == AuthEnum.sendingEmail
+                                // state.status == AuthStateValue.sendingEmail
                                 //     ?
                                 Column(
                               children: [
@@ -87,31 +87,29 @@ class LoadingForMailScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    state.status == AuthEnum.loading
-                                        ? "Verifyin"
-                                        : "Verify",
+                                    "Verify",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16.sm),
                                   ),
-                                  state.status == AuthEnum.loading
-                                      ? LimitedBox(
-                                          child: Row(
-                                            children: [
-                                              Gap(W: 10.sm),
-                                              SizedBox(
-                                                height: 20.sm,
-                                                width: 20.sm,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  strokeWidth: 1.sm,
-                                                  color: darkBlue,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : SizedBox(),
+                                  // state.status == AuthStateValue.loading
+                                  //     ? LimitedBox(
+                                  //         child: Row(
+                                  //           children: [
+                                  //             Gap(W: 10.sm),
+                                  //             SizedBox(
+                                  //               height: 20.sm,
+                                  //               width: 20.sm,
+                                  //               child:
+                                  //                   CircularProgressIndicator(
+                                  //                 strokeWidth: 1.sm,
+                                  //                 color: darkBlue,
+                                  //               ),
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //       )
+                                  //     : SizedBox(),
                                 ],
                               ),
                             ),

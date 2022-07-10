@@ -96,14 +96,14 @@ class LoginActionButtonWidget extends StatelessWidget {
     return SizedBox(
       child: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
-          if (state.status == AuthEnum.emailVerified) {
+          if (state.status == AuthStateValue.emailVerified) {
             Navigator.of(context).pushReplacementNamed("/home");
             Fluttertoast.showToast(msg: "Logged in Successfully");
           }
-          if (state.status == AuthEnum.emailNotVerified) {
+          if (state.status == AuthStateValue.emailNotVerified) {
             Navigator.of(context).pushReplacementNamed("/verifyemail");
           }
-          if (state.status == AuthEnum.error) {
+          if (state.status == AuthStateValue.error) {
             Util.showNormalCoolAlerr(
                 context: context,
                 type: CoolAlertType.error,
@@ -136,10 +136,10 @@ class LoginActionButtonWidget extends StatelessWidget {
                 child: Padding(
                     padding: EdgeInsets.symmetric(
                         vertical: 15.sm, horizontal: 50.sm),
-                    child: state.status == AuthEnum.loading &&
-                            state.status != AuthEnum.emailVerified &&
-                            state.status != AuthEnum.emailNotVerified &&
-                            state.status != AuthEnum.error
+                    child: state.status == AuthStateValue.loading &&
+                            state.status != AuthStateValue.emailVerified &&
+                            state.status != AuthStateValue.emailNotVerified &&
+                            state.status != AuthStateValue.error
                         ? SizedBox(
                             height: 20.sm,
                             width: 20.sm,

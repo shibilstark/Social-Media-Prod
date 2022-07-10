@@ -2,7 +2,7 @@
 part of 'current_user_bloc.dart';
 
 class CurrentUserState extends Equatable {
-  final UserStateEnum status;
+  final String status;
   final MainFailures? failure;
   final ProfileFeedModel? data;
 
@@ -13,7 +13,7 @@ class CurrentUserState extends Equatable {
   List<Object?> get props => [status, failure, data];
 
   CurrentUserState copyWith({
-    UserStateEnum? status,
+    String? status,
     MainFailures? failure,
     ProfileFeedModel? data,
   }) {
@@ -26,7 +26,7 @@ class CurrentUserState extends Equatable {
 }
 
 class CurrentUserInitial extends CurrentUserState {
-  final UserStateEnum status;
+  final String status;
   final MainFailures? failure;
   final ProfileFeedModel? data;
   CurrentUserInitial(

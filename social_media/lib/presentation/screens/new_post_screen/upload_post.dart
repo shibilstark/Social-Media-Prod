@@ -1,14 +1,29 @@
+import 'dart:io';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_media/application/new_post/new_post_bloc.dart';
+import 'package:social_media/application/new_post/post_state_values.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/core/controllers/text_editing_controllers.dart';
+import 'package:social_media/domain/global/global_variables.dart';
+import 'package:social_media/domain/models/post_model/post_model.dart';
+import 'package:social_media/presentation/routes/app_router.dart';
 import 'package:social_media/presentation/widgets/custom_text_field.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
+import 'package:social_media/utility/util.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../widgets/common_text_field.dart';
 
 class UploadPostScreen extends StatelessWidget {
   const UploadPostScreen({Key? key}) : super(key: key);
@@ -36,123 +51,173 @@ class UploadPostBody extends StatelessWidget {
     return SingleChildScrollView(
       child: Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 5.sm, horizontal: 5.sm),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Gap(H: 20.sm),
-              Container(
-                color: Theme.of(context).bottomSheetTheme.backgroundColor,
-                height: (width * 0.95) / (4 / 3),
-                width: width * 0.95,
-                // child: Image.asset(
-                //   "assets/dummy/1.webp",
-                //   // fit: BoxFit.,
-                //   // fill
-                //   // cover
-                //   // fitHeight
-                //   //
-                // ),
-              ),
-              Gap(H: 40.sm),
-              Center(
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 400.sm),
-                  child: Column(
-                    children: [
-                      UploadPostTextField(
-                          controller: PostTextFieldControllers.discription,
-                          hint: "discription",
-                          length: 250),
-                      UploadPostTextField(
-                          controller: PostTextFieldControllers.tag,
-                          hint: "tag",
-                          length: 30),
-                      Gap(H: 30.sm),
-                      SizedBox(
-                        height: 40.sm,
-                        width: 200.sm,
-                        child: ElevatedButton(
-                            onPressed: () {},
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Upload",
-                                  style: TextStyle(
-                                      color: smoothWhite,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16.sm),
-                                ),
-                                Gap(
-                                  W: 5.sm,
-                                ),
-                                Icon(
-                                  Icons.upload_sharp,
-                                  size: 20.sm,
-                                )
-                              ],
-                            )),
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+          padding: EdgeInsets.symmetric(vertical: 5.sm, horizontal: 10.sm),
+          child: BlocConsumer<NewPostBloc, NewPostState>(
+            listener: (context, state) {
+              if (state.status == PostStateValues.uploading) {
+                Fluttertoast.showToast(msg: "Uploading");
+                Navigator.of(context).pushReplacementNamed('/home');
+              }
+              if (state.status == PostStateValues.uploaded) {
+                Fluttertoast.showToast(msg: "Uploaded");
+              }
+              if (state.status == PostStateValues.notUploaded) {
+                // Fluttertoast.showToast(msg: "Uploaded");
 
-class UploadPostTextField extends StatelessWidget {
-  const UploadPostTextField(
-      {Key? key,
-      required this.controller,
-      required this.hint,
-      required this.length})
-      : super(key: key);
-  final String hint;
-  final TextEditingController controller;
-  final int length;
+                Util.showNormalCoolAlerr(
+                    context: context,
+                    type: CoolAlertType.error,
+                    okString: "OK",
+                    text: state.failure!.error);
+              }
+            },
+            builder: (context, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Gap(H: 20.sm),
+                  state.post!.type == PostType.image
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed("/seeimageoffline",
+                                arguments: ScreenArgs(
+                                    args: {'path': state.post!.file}));
+                          },
+                          child: Container(
+                            color: Theme.of(context)
+                                .bottomSheetTheme
+                                .backgroundColor,
+                            constraints: BoxConstraints(maxHeight: 400.sm),
+                            child: Image.file(
+                              File(state.post!.file),
+                            ),
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                "/offlinevideoplayer",
+                                arguments: ScreenArgs(
+                                    args: {'path': state.post!.file}));
+                          },
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10.sm),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: darkBg,
+                                  ),
 
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      maxLength: length,
-      maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
-      controller: controller,
-      cursorColor: primaryBlue,
-      style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 16.sm),
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(horizontal: 10.sm),
-        hintText: hint,
-        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-            color: Theme.of(context)
-                .textTheme
-                .bodyMedium!
-                .color!
-                .withOpacity(0.5)),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-              color: Theme.of(context).textTheme.bodyMedium!.color!,
-              width: 1.sm),
-          borderRadius: BorderRadius.circular(5.sm),
-        ),
-        border: UnderlineInputBorder(
-          borderSide: BorderSide(
-              color: Theme.of(context).textTheme.bodyMedium!.color!,
-              width: 1.sm),
-          borderRadius: BorderRadius.circular(5.sm),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: Theme.of(context).textTheme.bodyMedium!.color!,
-            width: 1.sm,
+                                  // constraints: BoxConstraints(
+                                  //     maxHeight: 200.sm,
+                                  //     minHeight: 150.sm,
+                                  //     minWidth: 300),
+                                  width: width,
+                                  height: width * 0.7,
+
+                                  child: Opacity(
+                                    opacity: 0.8,
+                                    child: Image.file(
+                                      File(state.post!.thumbnail!),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              CircleAvatar(
+                                backgroundColor: darkBg.withOpacity(0.5),
+                                radius: 30.sm,
+                                child: Icon(
+                                  Icons.play_arrow,
+                                  size: 30.sm,
+                                  color: pureWhite,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                  Gap(H: 40.sm),
+                  Center(
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: 400.sm),
+                      child: Column(
+                        children: [
+                          CommonTextField(
+                              controller: PostTextFieldControllers.discription,
+                              hint: "discription",
+                              length: 250),
+                          CommonTextField(
+                              controller: PostTextFieldControllers.tag,
+                              hint: "tag",
+                              length: 30),
+                          Gap(H: 30.sm),
+                          BlocConsumer<NewPostBloc, NewPostState>(
+                            listener: (context, state) {},
+                            builder: (context, state) {
+                              return SizedBox(
+                                height: 40.sm,
+                                width: 200.sm,
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      final model = PostModel(
+                                          postId: Uuid().v4(),
+                                          userId: Global.USER_DATA.id,
+                                          post: state.post!.file,
+                                          createdAt: DateTime.now(),
+                                          laseEdit: DateTime.now(),
+                                          comments: [],
+                                          lights: [],
+                                          type: state.post!.type,
+                                          videoThumbnail: state.post!.thumbnail,
+                                          discription: PostTextFieldControllers
+                                              .discription.text
+                                              .trim(),
+                                          tag: PostTextFieldControllers.tag.text
+                                              .trim(),
+                                          reports: []);
+
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        context
+                                            .read<NewPostBloc>()
+                                            .add(UploadPost(model: model));
+                                      });
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Upload",
+                                          style: TextStyle(
+                                              color: smoothWhite,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16.sm),
+                                        ),
+                                        Gap(
+                                          W: 5.sm,
+                                        ),
+                                        Icon(
+                                          Icons.upload_sharp,
+                                          size: 20.sm,
+                                        )
+                                      ],
+                                    )),
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              );
+            },
           ),
-          borderRadius: BorderRadius.circular(5.sm),
         ),
       ),
     );
@@ -247,14 +312,6 @@ class NewPostAppBar extends StatelessWidget {
                 .textTheme
                 .titleLarge!
                 .copyWith(fontSize: 23, fontWeight: FontWeight.w500)),
-        // actions: [
-        //   Gap(W: 30.sm),
-        //   IconButton(
-        //     icon: Icon(Icons.upload),
-        //     onPressed: () {},
-        //   ),
-        //   Gap(W: 15.sm),
-        // ],
       ),
     );
   }

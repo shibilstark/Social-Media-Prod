@@ -29,16 +29,16 @@ class SplashScreen extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed("/login");
             } else {
               Global.USER_DATA = data;
-              if (state.status == AuthEnum.emailNotVerified) {
+              if (state.status == AuthStateValue.emailNotVerified) {
                 log("emial not verified");
                 Navigator.of(context).pushReplacementNamed("verifyemail");
               }
-              if (state.status == AuthEnum.emailVerified &&
+              if (state.status == AuthStateValue.emailVerified &&
                   Global.USER_DATA.email != "") {
                 log("emial  verified");
                 Navigator.of(context).pushReplacementNamed("/home");
               }
-              if (state.status == AuthEnum.error) {
+              if (state.status == AuthStateValue.error) {
                 Util.showNormalCoolAlerr(
                     context: context,
                     type: CoolAlertType.error,

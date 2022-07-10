@@ -15,24 +15,24 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AccountRepo _accountServices;
   LoginBloc(this._accountServices)
-      : super(const LoginInitial(
+      : super(LoginInitial(
           failure: null,
-          status: AuthEnum.initial,
+          status: AuthStateValue.initial,
         )) {
     on<LoggedIn>((event, emit) async {
-      emit(state.copyWith(status: AuthEnum.loading));
+      emit(state.copyWith(status: AuthStateValue.loading));
 
       final result = await _accountServices.login(
           email: event.email, password: event.password);
 
       result.fold(
         (model) {
-          emit(state.copyWith(status: AuthEnum.verfiying));
+          emit(state.copyWith(status: AuthStateValue.verfiying));
 
           if (model.isEmailVerified) {
-            emit(state.copyWith(status: AuthEnum.emailVerified));
+            emit(state.copyWith(status: AuthStateValue.emailVerified));
           } else {
-            emit(state.copyWith(status: AuthEnum.emailNotVerified));
+            emit(state.copyWith(status: AuthStateValue.emailNotVerified));
             Fluttertoast.showToast(
                 msg:
                     "We Have send an email to ${Global.USER_DATA.email} please check your email and verify");
@@ -42,7 +42,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         },
         (failure) {
           emit(state.copyWith(
-            status: AuthEnum.error,
+            status: AuthStateValue.error,
             failure: MainFailures(
                 error: failure.error, failureType: failure.failureType),
           ));
@@ -51,9 +51,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
     on<LoggedOut>((event, emit) async {
-      emit(state.copyWith(status: AuthEnum.loading));
+      emit(state.copyWith(status: AuthStateValue.loading));
       await UserDataStore.clearUserData();
-      emit(state.copyWith(status: AuthEnum.succes));
+      emit(state.copyWith(status: AuthStateValue.succes));
     });
   }
 }

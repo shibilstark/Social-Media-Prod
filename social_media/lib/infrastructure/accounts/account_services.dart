@@ -70,7 +70,7 @@ class AccountServices implements AccountRepo {
           // final User currentUser = userCred.user!;
 
           await UserDataStore.saveUserData(
-              id: user.data()[UmKeys.userId], email: email);
+              id: user.data()[UmKeys.userId], email: email, isVerified: false);
           return Left(UserModel.fromMap(user.data()));
         } else {
           return const Right(MainFailures(

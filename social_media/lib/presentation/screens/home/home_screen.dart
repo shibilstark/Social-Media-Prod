@@ -13,6 +13,7 @@ import 'package:social_media/presentation/screens/post/post_screen.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 
 ValueNotifier<int> _bottomNav = ValueNotifier(0);
+final globalBucket = PageStorageBucket();
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({
@@ -143,7 +144,7 @@ class MainAppBar extends StatelessWidget {
                 Center(
                   child: IconButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed("/newpost");
+                        // Navigator.of(context).pushNamed("/newpost");
                       },
                       icon: IconTheme(
                         data: Theme.of(context).primaryIconTheme,

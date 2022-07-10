@@ -1,7 +1,7 @@
 part of 'verification_bloc.dart';
 
 class VerificationState extends Equatable {
-  final AuthEnum status;
+  final String status;
   final MainFailures? failure;
 
   const VerificationState({
@@ -13,7 +13,7 @@ class VerificationState extends Equatable {
   List<Object?> get props => [status, failure];
 
   VerificationState copyWith({
-    AuthEnum? status,
+    String? status,
     MainFailures? failure,
   }) {
     return VerificationState(
@@ -25,9 +25,9 @@ class VerificationState extends Equatable {
 
 class VerificationInitial extends VerificationState {
   const VerificationInitial({
-    required AuthEnum status,
+    required String status,
     MainFailures? failure,
-  }) : super(status: AuthEnum.initial, failure: null);
+  }) : super(status: AuthStateValue.initial, failure: null);
 
   @override
   List<Object?> get props => [status, failure];

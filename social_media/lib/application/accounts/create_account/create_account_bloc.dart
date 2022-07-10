@@ -14,10 +14,10 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
   final AccountRepo _accountServices;
   CreateAccountBloc(this._accountServices)
       : super(CreateAccountInitial(
-            state: AuthEnum.initial, faulure: null, model: null)) {
+            state: AuthStateValue.initial, faulure: null, model: null)) {
     on<AccountCreated>((event, emit) async {
       emit(state.copyWith(
-        state: AuthEnum.loading,
+        state: AuthStateValue.loading,
       ));
 
       final response = await _accountServices.createAccount(
@@ -25,11 +25,11 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
 
       response.fold(
         (success) {
-          emit(state.copyWith(state: AuthEnum.succes, model: success));
+          emit(state.copyWith(state: AuthStateValue.succes, model: success));
         },
         (failure) {
           emit(state.copyWith(
-              state: AuthEnum.error,
+              state: AuthStateValue.error,
               failure: MainFailures(
                   failureType: failure.failureType, error: failure.error)));
         },

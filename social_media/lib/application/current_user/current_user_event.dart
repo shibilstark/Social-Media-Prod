@@ -4,8 +4,12 @@ abstract class CurrentUserEvent extends Equatable {}
 
 class FetchUser extends CurrentUserEvent {
   final String userId;
+  final bool shouldLoad;
 
-  FetchUser({required this.userId});
+  FetchUser({
+    required this.userId,
+    required this.shouldLoad,
+  });
   @override
-  List<Object?> get props => [userId];
+  List<Object?> get props => [userId, shouldLoad];
 }

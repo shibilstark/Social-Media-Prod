@@ -3,7 +3,7 @@ import 'package:social_media/domain/models/user_model/user_model.dart';
 
 class ProfileFeedModel {
   final UserModel user;
-  final PostModel post;
+  final List<PostModel> post;
 
   ProfileFeedModel({required this.user, required this.post});
 }
