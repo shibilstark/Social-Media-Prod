@@ -8,10 +8,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:social_media/application/auth/auth_bloc.dart';
+import 'package:social_media/application/user/user_bloc.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/core/controllers/text_controllers.dart';
 import 'package:social_media/core/themes/themes.dart';
+import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/presentation/widgets/custom_text_field.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 import 'package:social_media/utility/util.dart';
@@ -96,6 +98,9 @@ class LoginActionButtonWidget extends StatelessWidget {
         listener: (context, state) {
           if (state is AuthStateLogginSuccess) {
             log("AuthStateLogginSuccess");
+            context
+                .read<UserBloc>()
+                .add(FetchCurrentUser(id: Global.USER_DATA.id));
             Navigator.of(context).pushReplacementNamed("/home");
             Fluttertoast.showToast(msg: "Loging in");
           } else if (state is AuthStateLogginError) {

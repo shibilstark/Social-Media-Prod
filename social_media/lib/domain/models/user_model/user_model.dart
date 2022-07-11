@@ -63,9 +63,9 @@ class UserModel {
       isBlocked: map['isBlocked'] as bool,
       creationDate:
           DateTime.fromMillisecondsSinceEpoch(map['creationDate'] as int),
-      followers: List<String>.from((map['followers']) as List),
-      following: List<String>.from((map['following']) as List),
-      posts: List<String>.from((map['posts']) as List),
+      followers: List<String>.from((map['followers']) as List<dynamic>),
+      following: List<String>.from((map['following']) as List<dynamic>),
+      posts: List<String>.from((map['posts']) as List<dynamic>),
       discription: map['discription'] as String,
       profileImage: map['profileImage'] as String,
     );

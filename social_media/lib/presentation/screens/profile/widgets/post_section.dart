@@ -23,10 +23,10 @@ class ProfilePostsSection extends StatelessWidget {
             separatorBuilder: (context, index) => Gap(
               H: 10.sm,
             ),
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemBuilder: (context, index) => PostTExtureLoading(),
+            itemBuilder: (context, index) => const PostTExtureLoading(),
             itemCount: 2,
           ));
         } else if (state is FetchCurrentUserSuccess) {
@@ -34,7 +34,7 @@ class ProfilePostsSection extends StatelessWidget {
           final posts = state.data.post;
 
           if (posts.isEmpty) {
-            return SizedBox(
+            return const SizedBox(
               child: Center(
                 child: Text("No Posts Yet"),
               ),
@@ -45,46 +45,23 @@ class ProfilePostsSection extends StatelessWidget {
               separatorBuilder: (context, index) => Gap(
                 H: 10.sm,
               ),
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemBuilder: (context, index) => OwnPostTexture(index: index),
+              itemBuilder: (context, index) => OwnPostTexture(
+                index: index,
+                key: ValueKey(posts[index].postId),
+              ),
               itemCount: posts.length,
             ));
             ;
           }
         }
 
-        return Center(
+        return const Center(
           child: Text("Oops"),
         );
       },
     );
-    // return state.status == UserStatesValues.loading
-    // ? Container(
-    //     child: ListView.separated(
-    //     separatorBuilder: (context, index) => Gap(
-    //       H: 10.sm,
-    //     ),
-    //     physics: NeverScrollableScrollPhysics(),
-    //     scrollDirection: Axis.vertical,
-    //     shrinkWrap: true,
-    //     itemBuilder: (context, index) => PostTExtureLoading(),
-    //     itemCount: 2,
-    //   ))
-    //     : state.data!.user.posts.isEmpty
-    //         ? SizedBox()
-    // : Container(
-    //     child: ListView.separated(
-    //     separatorBuilder: (context, index) => Gap(
-    //       H: 10.sm,
-    //     ),
-    //     physics: NeverScrollableScrollPhysics(),
-    //     scrollDirection: Axis.vertical,
-    //     shrinkWrap: true,
-    //     itemBuilder: (context, index) =>
-    //         OwnPostTexture(index: index),
-    //     itemCount: state.data!.user.posts.length,
-    //   ));
   }
 }

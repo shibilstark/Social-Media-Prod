@@ -1,6 +1,6 @@
 part of 'pick_media_bloc.dart';
 
-abstract class PickMediaState extends Equatable {
+class PickMediaState extends Equatable {
   const PickMediaState();
 
   @override
@@ -13,10 +13,14 @@ class PickMediaLoading extends PickMediaState {}
 
 class PickMediaSuccess extends PickMediaState {
   final PostTypeModel postTypeModel;
-  PickMediaSuccess({required this.postTypeModel});
+  const PickMediaSuccess({required this.postTypeModel});
+  @override
+  List<Object> get props => [postTypeModel];
 }
 
 class PickMediaError extends PickMediaState {
   final MainFailures failure;
-  PickMediaError({required this.failure});
+  const PickMediaError({required this.failure});
+  @override
+  List<Object> get props => [failure];
 }

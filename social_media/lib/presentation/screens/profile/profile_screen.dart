@@ -18,8 +18,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
-
     return const Scaffold(
       appBar:
           PreferredSize(child: ProfileAppBar(), preferredSize: appBarHeight),
@@ -75,11 +73,17 @@ class ProfileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<UserBloc>().add(FetchCurrentUser(id: Global.USER_DATA.id));
+    // });
     return BlocConsumer<UserBloc, UserState>(
+      buildWhen: (previous, current) => previous != current,
       listener: (context, state) {},
       builder: (context, state) {
-        if (state is UserStateLoading) {
-          return InnerProfileLoading();
+        if (state is FetchCurrentUserError) {
+          return const Center(
+            child: Text("Oops"),
+          );
         } else if (state is FetchCurrentUserSuccess) {
           return Padding(
             padding: constPadding,
@@ -115,10 +119,7 @@ class ProfileBody extends StatelessWidget {
             ),
           );
         }
-
-        return const Center(
-          child: Text("Oops"),
-        );
+        return InnerProfileLoading();
       },
     );
   }

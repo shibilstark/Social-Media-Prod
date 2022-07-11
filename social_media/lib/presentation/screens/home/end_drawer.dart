@@ -16,6 +16,9 @@ class EndDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<UserBloc>().add(FetchCurrentUser(id: Global.USER_DATA.id));
+    });
     return SafeArea(
       child: ClipRRect(
         borderRadius: BorderRadius.only(
@@ -25,108 +28,112 @@ class EndDrawer extends StatelessWidget {
         child: Drawer(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaY: 2, sigmaX: 2),
-            child: Column(
-              children: [
-                const EndDrawerMiniProfile(),
-                Container(
-                  padding: EdgeInsets.all(20.sm),
-                  child: Column(
-                    children: [
-                      BlocBuilder<ThemeBloc, ThemeState>(
-                        builder: (context, state) {
-                          return SizedBox(
-                            height: 35.sm,
-                            child: Row(
-                              children: [
-                                IconTheme(
-                                    data: Theme.of(context).iconTheme,
-                                    child: Icon(
-                                      state.isDark
-                                          ? Icons.light_mode
-                                          : Icons.dark_mode,
-                                      size: 20,
-                                    )),
-                                Gap(
-                                  W: 10.sm,
-                                ),
-                                Text(
-                                  state.isDark
-                                      ? "Back to Light"
-                                      : "Switch to Dark",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(
-                                          fontSize: 18.sm,
-                                          fontWeight: FontWeight.w400),
-                                ),
-                                const Spacer(),
-                                Builder(builder: (context) {
-                                  bool sValue = state.isDark ? true : false;
-                                  return Switch(
-                                      value: sValue,
-                                      onChanged: (value) async {
-                                        if (value) {
-                                          BlocProvider.of<ThemeBloc>(context)
-                                              .add(ChangeTheme(
-                                                  changeTo: MyThemeMode.dark));
-                                        } else {
-                                          BlocProvider.of<ThemeBloc>(context)
-                                              .add(ChangeTheme(
-                                                  changeTo: MyThemeMode.light));
-                                        }
-                                      });
-                                }),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      const Divider(),
-                      const MenuTiles(
-                        icon: Icons.settings,
-                        title: "Settings",
-                        whereTo: Scaffold(),
-                      ),
-                      const Divider(),
-                      const MenuTiles(
-                        icon: Icons.privacy_tip,
-                        title: "Privacy Policy",
-                        whereTo: Scaffold(),
-                      ),
-                      const Divider(),
-                      const MenuTiles(
-                        icon: Icons.gavel,
-                        title: "Terms % Conditions",
-                        whereTo: Scaffold(),
-                      ),
-                      const Divider(),
-                      const MenuTiles(
-                        icon: Icons.info,
-                        title: "About",
-                        whereTo: Scaffold(),
-                      ),
-                      const Divider(),
-                      const MenuTiles(
-                        icon: Icons.redeem,
-                        title: "Invite a Friend",
-                        whereTo: Scaffold(),
-                      ),
-                      const Divider(),
-                      const MenuTiles(
-                        icon: Icons.spoke,
-                        title: "Connect with us",
-                        whereTo: Scaffold(),
-                      ),
-                      const Divider(),
-                      const LogOutTile(),
-                      const Divider(
-                        color: primary,
-                      ),
-                    ],
-                  ),
-                )
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const EndDrawerMiniProfile(),
+                  Container(
+                    padding: EdgeInsets.all(20.sm),
+                    child: Column(
+                      children: [
+                        BlocBuilder<ThemeBloc, ThemeState>(
+                          builder: (context, state) {
+                            return SizedBox(
+                              height: 35.sm,
+                              child: Row(
+                                children: [
+                                  IconTheme(
+                                      data: Theme.of(context).iconTheme,
+                                      child: Icon(
+                                        state.isDark
+                                            ? Icons.light_mode
+                                            : Icons.dark_mode,
+                                        size: 20,
+                                      )),
+                                  Gap(
+                                    W: 10.sm,
+                                  ),
+                                  Text(
+                                    state.isDark
+                                        ? "Back to Light"
+                                        : "Switch to Dark",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                            fontSize: 18.sm,
+                                            fontWeight: FontWeight.w400),
+                                  ),
+                                  const Spacer(),
+                                  Builder(builder: (context) {
+                                    bool sValue = state.isDark ? true : false;
+                                    return Switch(
+                                        value: sValue,
+                                        onChanged: (value) async {
+                                          if (value) {
+                                            BlocProvider.of<ThemeBloc>(context)
+                                                .add(ChangeTheme(
+                                                    changeTo:
+                                                        MyThemeMode.dark));
+                                          } else {
+                                            BlocProvider.of<ThemeBloc>(context)
+                                                .add(ChangeTheme(
+                                                    changeTo:
+                                                        MyThemeMode.light));
+                                          }
+                                        });
+                                  }),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        const Divider(),
+                        const MenuTiles(
+                          icon: Icons.settings,
+                          title: "Settings",
+                          whereTo: Scaffold(),
+                        ),
+                        const Divider(),
+                        const MenuTiles(
+                          icon: Icons.privacy_tip,
+                          title: "Privacy Policy",
+                          whereTo: Scaffold(),
+                        ),
+                        const Divider(),
+                        const MenuTiles(
+                          icon: Icons.gavel,
+                          title: "Terms % Conditions",
+                          whereTo: Scaffold(),
+                        ),
+                        const Divider(),
+                        const MenuTiles(
+                          icon: Icons.info,
+                          title: "About",
+                          whereTo: Scaffold(),
+                        ),
+                        const Divider(),
+                        const MenuTiles(
+                          icon: Icons.redeem,
+                          title: "Invite a Friend",
+                          whereTo: Scaffold(),
+                        ),
+                        const Divider(),
+                        const MenuTiles(
+                          icon: Icons.spoke,
+                          title: "Connect with us",
+                          whereTo: Scaffold(),
+                        ),
+                        const Divider(),
+                        const LogOutTile(),
+                        const Divider(
+                          color: primary,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -151,6 +158,8 @@ class EndDrawerMiniProfile extends StatelessWidget {
         padding: EdgeInsets.all(20.sm),
         color: primaryBlue,
         child: BlocConsumer<UserBloc, UserState>(
+          buildWhen: (previous, current) =>
+              previous != current && current is! UserStateLoading,
           listener: (context, state) {},
           builder: (context, state) {
             if (state is UserStateLoading || state is UserInitial) {

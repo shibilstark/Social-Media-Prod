@@ -5,13 +5,6 @@ abstract class UploadPostEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class PickMedia extends UploadPostEvent {
-  final String type;
-  PickMedia({required this.type});
-  @override
-  List<Object> get props => [type];
-}
-
 class UploadPost extends UploadPostEvent {
   final PostModel postModel;
   UploadPost({required this.postModel});

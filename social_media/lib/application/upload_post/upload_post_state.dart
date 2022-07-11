@@ -18,13 +18,3 @@ class UploadPostError extends UploadPostState {
   final MainFailures failure;
   UploadPostError({required this.failure});
 }
-
-class PickMediaSuccess extends UploadPostState {
-  final PostTypeModel postTypeModel;
-  PickMediaSuccess({required this.postTypeModel});
-}
-
-class PickMediaError extends UploadPostState {
-  final MainFailures failure;
-  PickMediaError({required this.failure});
-}

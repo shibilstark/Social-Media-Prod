@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:social_media/application/auth/auth_bloc.dart';
+import 'package:social_media/application/pick_media/pick_media_bloc.dart';
 import 'package:social_media/application/theme/theme_bloc.dart';
 import 'package:social_media/application/upload_post/upload_post_bloc.dart';
 import 'package:social_media/application/user/user_bloc.dart';
@@ -57,6 +58,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<UploadPostBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<PickMediaBloc>(),
         ),
       ],
       child: ScreenUtilInit(

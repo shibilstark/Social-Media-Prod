@@ -12,9 +12,9 @@ class AppRouter {
   Route? onGenerateRoute(RouteSettings routSettings) {
     switch (routSettings.name) {
       case "/":
-        return MaterialPageRoute(builder: (_) => SplashScreen());
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       case "/login":
-        return MaterialPageRoute(builder: (_) => LoginScreen());
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
       case "/profile":
         final args = routSettings.arguments as ScreenArgs;
         return MaterialPageRoute(
@@ -23,12 +23,12 @@ class AppRouter {
                 ));
 
       case "/signup":
-        return MaterialPageRoute(builder: (_) => SignUpScreen());
+        return MaterialPageRoute(builder: (_) => const SignUpScreen());
       case "/home":
         return MaterialPageRoute(builder: (_) => HomeScreen());
 
-      // case "/uploadpost":
-      //   return MaterialPageRoute(builder: (_) => UploadPostScreen());
+      case "/uploadpost":
+        return MaterialPageRoute(builder: (_) => const UploadPostScreen());
       case "/editprofile":
         final args = routSettings.arguments as ScreenArgs;
         return MaterialPageRoute(

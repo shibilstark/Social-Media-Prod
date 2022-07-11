@@ -29,7 +29,6 @@ class UserServices implements UserRepo {
       if (postsInModel.isNotEmpty) {
         for (var post in posts) {
           for (String eachPost in postsInModel) {
-            log(post.id);
             if (eachPost == post.data()['postId']) {
               PostModel postModel = PostModel.fromMap(post.data());
 
@@ -39,11 +38,6 @@ class UserServices implements UserRepo {
             }
           }
         }
-
-        // showPosts.sort((a, b) {
-        //   return int.parse(b.createdAt.millisecond.toString()) -
-        //       int.parse(a.createdAt.millisecond.toString());
-        // });
       }
 
       final feed = ProfileFeedModel(user: userModel, post: showPosts);

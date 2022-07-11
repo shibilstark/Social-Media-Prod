@@ -1,15 +1,10 @@
-import 'dart:developer';
-
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
-import 'package:social_media/presentation/routes/app_router.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
-
 import '../../../../application/user/user_bloc.dart';
 
 final dummyProfilePicture = "assets/dummy/dummyDP.png";
@@ -43,8 +38,6 @@ class InnerProfilePart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = InnerProfilePartInheritedWidget.of(context)!.model;
-
     return BlocConsumer<UserBloc, UserState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -90,53 +83,50 @@ class InnerProfilePart extends StatelessWidget {
                           // crossAxisAlignment: CrossAxisAlignment.center,
                           // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                model.profileImage == ""
-                                    ? CircleAvatar(
-                                        radius: 65.sm,
-                                        backgroundColor: darkBlue,
-                                        child: CircleAvatar(
-                                          backgroundImage:
-                                              AssetImage(dummyProfilePicture),
-                                          radius: 60.sm,
-                                          backgroundColor: secondaryBlue,
-                                        ),
-                                      )
-                                    : CircleAvatar(
-                                        radius: 65.sm,
-                                        backgroundColor: darkBlue,
-                                        child: CircleAvatar(
-                                          backgroundImage:
-                                              NetworkImage(model.profileImage),
-                                          radius: 60.sm,
-                                          backgroundColor: secondaryBlue,
-                                        ),
-                                      ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context).pushNamed(
-                                        "/editprofile",
-                                        arguments: ScreenArgs(
-                                            args: {'userModel': model}));
-                                  },
-                                  child: Container(
-                                    height: 28.sm,
-                                    width: 28.sm,
-                                    decoration: BoxDecoration(
-                                        color: primaryBlue,
-                                        borderRadius:
-                                            BorderRadius.circular(5.sm)),
-                                    child: Icon(
-                                      Icons.edit,
-                                      color: pureWhite,
-                                      size: 16.sm,
+                            model.profileImage == ""
+                                ? CircleAvatar(
+                                    radius: 65.sm,
+                                    backgroundColor: darkBlue,
+                                    child: CircleAvatar(
+                                      backgroundImage:
+                                          AssetImage(dummyProfilePicture),
+                                      radius: 60.sm,
+                                      backgroundColor: secondaryBlue,
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: 65.sm,
+                                    backgroundColor: darkBlue,
+                                    child: CircleAvatar(
+                                      backgroundImage:
+                                          NetworkImage(model.profileImage),
+                                      radius: 60.sm,
+                                      backgroundColor: secondaryBlue,
                                     ),
                                   ),
-                                )
-                              ],
-                            ),
+
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     Navigator.of(context).pushNamed(
+                            //         "/editprofile",
+                            //         arguments: ScreenArgs(
+                            //             args: {'userModel': model}));
+                            //   },
+                            //   child: Container(
+                            //     height: 28.sm,
+                            //     width: 28.sm,
+                            //     decoration: BoxDecoration(
+                            //         color: primaryBlue,
+                            //         borderRadius:
+                            //             BorderRadius.circular(5.sm)),
+                            //     child: Icon(
+                            //       Icons.edit,
+                            //       color: pureWhite,
+                            //       size: 16.sm,
+                            //     ),
+                            //   ),
+                            // )
+
                             const Spacer(),
                             LimitedBox(
                               child: Padding(
