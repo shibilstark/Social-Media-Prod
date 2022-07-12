@@ -24,3 +24,31 @@ class PickMediaError extends PickMediaState {
   @override
   List<Object> get props => [failure];
 }
+
+class PickCoverImageSuccess extends PickMediaState {
+  final PostTypeModel postTypeModel;
+  const PickCoverImageSuccess({required this.postTypeModel});
+  @override
+  List<Object> get props => [postTypeModel];
+}
+
+class PickCoverImageError extends PickMediaState {
+  final MainFailures failure;
+  const PickCoverImageError({required this.failure});
+  @override
+  List<Object> get props => [failure];
+}
+
+class PickProfileImageSuccess extends PickMediaState {
+  final PostTypeModel postTypeModel;
+  const PickProfileImageSuccess({required this.postTypeModel});
+  @override
+  List<Object> get props => [postTypeModel];
+}
+
+class PickProfileImageError extends PickMediaState {
+  final MainFailures failure;
+  const PickProfileImageError({required this.failure});
+  @override
+  List<Object> get props => [failure];
+}

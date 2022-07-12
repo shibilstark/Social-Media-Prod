@@ -257,6 +257,31 @@ class SeePostImageOffline extends StatelessWidget {
   }
 }
 
+class SeeAssetImage extends StatelessWidget {
+  const SeeAssetImage({Key? key, required this.image}) : super(key: key);
+
+  final String image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: softBlack,
+      appBar: AppBar(
+        backgroundColor: darkBg,
+      ),
+      body: SafeArea(
+          child: Container(
+        child: Center(
+          child: Image.asset(
+            image,
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+      )),
+    );
+  }
+}
+
 class SeePostVideoOnline extends StatelessWidget {
   const SeePostVideoOnline({Key? key, required this.video}) : super(key: key);
 

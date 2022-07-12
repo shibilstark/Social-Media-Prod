@@ -11,8 +11,6 @@ class FetchCurrentUser extends UserEvent {
   FetchCurrentUser({required this.id, this.shoudReload = false});
 }
 
-class FetchUserById extends UserEvent {
-  final String id;
+class RemovePrfileImage extends UserEvent {}
 
-  FetchUserById({required this.id});
-}
+class ChangeProfilePic extends UserEvent {}

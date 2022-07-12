@@ -30,17 +30,46 @@ class FetchCurrentUserError extends UserState {
   List<Object> get props => [failure];
 }
 
-class FetchByIdError extends UserState {
+class RemoveProfileSuccess extends UserState {
+  @override
+  List<Object> get props => [];
+}
+
+class RemoveProfileLoading extends UserState {
+  @override
+  List<Object> get props => [];
+}
+
+class RemoveProfileError extends UserState {
   final MainFailures failure;
-  FetchByIdError({required this.failure});
+  RemoveProfileError({required this.failure});
   @override
   List<Object> get props => [failure];
 }
 
-class FetchByIdSuccess extends UserState {
-  final ProfileFeedModel model;
-
-  FetchByIdSuccess({required this.model});
+class ChangeProfilePicSuccess extends UserState {
   @override
-  List<Object> get props => [model];
+  List<Object> get props => [];
 }
+
+class ChangeProfilPicError extends UserState {
+  final MainFailures failure;
+  ChangeProfilPicError({required this.failure});
+  @override
+  List<Object> get props => [failure];
+}
+
+// class FetchByIdError extends UserState {
+//   final MainFailures failure;
+//   FetchByIdError({required this.failure});
+//   @override
+//   List<Object> get props => [failure];
+// }
+
+// class FetchByIdSuccess extends UserState {
+//   final ProfileFeedModel model;
+
+//   FetchByIdSuccess({required this.model});
+//   @override
+//   List<Object> get props => [model];
+// }

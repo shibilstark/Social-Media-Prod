@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
+import 'package:social_media/infrastructure/user_services/user_services.dart';
+import 'package:social_media/presentation/screens/profile/widgets/edit_sheet.dart';
+import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 import '../../../../application/user/user_bloc.dart';
 
@@ -42,6 +45,7 @@ class InnerProfilePart extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         if (state is UserStateLoading) {
+          return InnerProfileLoading();
         } else if (state is FetchCurrentUserSuccess) {
           final model = state.data.user;
           return Column(
@@ -61,11 +65,6 @@ class InnerProfilePart extends StatelessWidget {
                           )
                         : Container(
                             width: double.infinity,
-                            // decoration: BoxDecoration(
-                            //     image: DecorationImage(
-                            //   image: NetworkImage(model.coverImage),
-                            //   // fit: BoxFit.cover
-                            // )),
                             constraints: BoxConstraints(maxHeight: 150.sm),
                             child: Image.network(
                               model.coverImage,
@@ -80,53 +79,33 @@ class InnerProfilePart extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          // crossAxisAlignment: CrossAxisAlignment.center,
-                          // mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            model.profileImage == ""
-                                ? CircleAvatar(
-                                    radius: 65.sm,
-                                    backgroundColor: darkBlue,
-                                    child: CircleAvatar(
-                                      backgroundImage:
-                                          AssetImage(dummyProfilePicture),
-                                      radius: 60.sm,
-                                      backgroundColor: secondaryBlue,
+                            GestureDetector(
+                              onTap: () {
+                                openEditProfileImageSheet(context: context);
+                              },
+                              child: model.profileImage == ""
+                                  ? CircleAvatar(
+                                      radius: 65.sm,
+                                      backgroundColor: darkBlue,
+                                      child: CircleAvatar(
+                                        backgroundImage:
+                                            AssetImage(dummyProfilePicture),
+                                        radius: 60.sm,
+                                        backgroundColor: secondaryBlue,
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 65.sm,
+                                      backgroundColor: darkBlue,
+                                      child: CircleAvatar(
+                                        backgroundImage:
+                                            NetworkImage(model.profileImage),
+                                        radius: 60.sm,
+                                        backgroundColor: secondaryBlue,
+                                      ),
                                     ),
-                                  )
-                                : CircleAvatar(
-                                    radius: 65.sm,
-                                    backgroundColor: darkBlue,
-                                    child: CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(model.profileImage),
-                                      radius: 60.sm,
-                                      backgroundColor: secondaryBlue,
-                                    ),
-                                  ),
-
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     Navigator.of(context).pushNamed(
-                            //         "/editprofile",
-                            //         arguments: ScreenArgs(
-                            //             args: {'userModel': model}));
-                            //   },
-                            //   child: Container(
-                            //     height: 28.sm,
-                            //     width: 28.sm,
-                            //     decoration: BoxDecoration(
-                            //         color: primaryBlue,
-                            //         borderRadius:
-                            //             BorderRadius.circular(5.sm)),
-                            //     child: Icon(
-                            //       Icons.edit,
-                            //       color: pureWhite,
-                            //       size: 16.sm,
-                            //     ),
-                            //   ),
-                            // )
-
+                            ),
                             const Spacer(),
                             LimitedBox(
                               child: Padding(
@@ -159,16 +138,45 @@ class InnerProfilePart extends StatelessWidget {
                           ],
                         ),
                         Gap(
-                          H: 10.sm,
+                          H: 15.sm,
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 10.sm),
-                          child: Text(
-                            model.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(fontSize: 18.sm),
+                          child: Row(
+                            children: [
+                              Text(
+                                model.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(fontSize: 18.sm),
+                              ),
+                              Gap(
+                                W: 10.sm,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(3.sm),
+                                    border: Border.all(
+                                      width: 0.5.sm,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .color!,
+                                    )),
+                                child: SizedBox(
+                                    height: 20.sm,
+                                    width: 20.sm,
+                                    child: Icon(
+                                      Icons.edit,
+                                      size: 14,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .color,
+                                    )),
+                              ),
+                            ],
                           ),
                         )
                       ],
@@ -176,67 +184,29 @@ class InnerProfilePart extends StatelessWidget {
                   )
                 ],
               ),
-              Gap(
-                H: 10.sm,
-              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.sm),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        model.discription,
-                        // maxLines: 3,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(fontSize: 15.sm),
-                      ),
+                    Gap(
+                      H: 10.sm,
                     ),
-                    model.userId != Global.USER_DATA.id
-                        ? Column(
-                            children: [
-                              Gap(
-                                H: 10.sm,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                      child: ElevatedButton(
-                                    child: Text(
-                                      "Follow",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .copyWith(
-                                              fontSize: 15.sm,
-                                              fontWeight: FontWeight.w500),
-                                    ),
-                                    onPressed: () {},
-                                  )),
-                                  Gap(
-                                    W: 20.sm,
-                                  ),
-                                  Expanded(
-                                      child: ElevatedButton(
-                                    child: Text(
-                                      "Message",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall!
-                                          .copyWith(
-                                              fontSize: 15.sm,
-                                              fontWeight: FontWeight.w500),
-                                    ),
-                                    onPressed: () {},
-                                  )),
-                                ],
-                              ),
-                            ],
-                          )
-                        : SizedBox(),
+                    Row(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            model.discription,
+                            // maxLines: 3,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(fontSize: 15.sm),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               )

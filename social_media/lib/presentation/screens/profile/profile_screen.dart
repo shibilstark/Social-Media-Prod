@@ -6,15 +6,14 @@ import 'package:social_media/core/colors/colors.dart';
 import 'package:social_media/core/constants/constants.dart';
 import 'package:social_media/domain/global/global_variables.dart';
 import 'package:social_media/domain/models/user_model/user_model.dart';
+import 'package:social_media/presentation/screens/new_post_screen/new_post_sheet.dart';
 import 'package:social_media/presentation/screens/profile/widgets/post_section.dart';
 import 'package:social_media/presentation/screens/profile/widgets/profile_part.dart';
 import 'package:social_media/presentation/shimmers/inner_profile_shimmer.dart';
 import 'package:social_media/presentation/widgets/gap.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key, required this.userId}) : super(key: key);
-
-  final String userId;
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +54,14 @@ class ProfileAppBar extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                // showNewPostBottomSheet(context: context);
+                openNewPostSheet(context: context);
               },
               icon: Icon(Icons.add_photo_alternate)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed("/settings");
+              },
+              icon: Icon(Icons.settings)),
           Gap(
             W: 15.sm,
           )
@@ -77,8 +80,19 @@ class ProfileBody extends StatelessWidget {
     //   context.read<UserBloc>().add(FetchCurrentUser(id: Global.USER_DATA.id));
     // });
     return BlocConsumer<UserBloc, UserState>(
-      buildWhen: (previous, current) => previous != current,
-      listener: (context, state) {},
+      // buildWhen: (previous, current) => previous != current,
+      listener: (context, state) {
+        if (state is RemoveProfileError ||
+            state is RemoveProfileSuccess ||
+            state is ChangeProfilPicError ||
+            state is ChangeProfilePicSuccess) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context
+                .read<UserBloc>()
+                .add(FetchCurrentUser(id: Global.USER_DATA.id));
+          });
+        }
+      },
       builder: (context, state) {
         if (state is FetchCurrentUserError) {
           return const Center(
@@ -89,12 +103,10 @@ class ProfileBody extends StatelessWidget {
             padding: constPadding,
             child: ListView(
               children: [
-                state is UserStateLoading
-                    ? InnerProfileLoading()
-                    : InnerProfilePartInheritedWidget(
-                        model: state.data.user,
-                        widget: InnerProfilePart(),
-                      ),
+                InnerProfilePartInheritedWidget(
+                  model: state.data.user,
+                  widget: InnerProfilePart(),
+                ),
                 Gap(
                   H: 20.sm,
                 ),
@@ -118,8 +130,9 @@ class ProfileBody extends StatelessWidget {
               ],
             ),
           );
+        } else {
+          return InnerProfileLoading();
         }
-        return InnerProfileLoading();
       },
     );
   }

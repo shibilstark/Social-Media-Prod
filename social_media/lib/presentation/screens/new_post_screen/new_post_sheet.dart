@@ -31,10 +31,8 @@ class NewPostSheet extends StatelessWidget {
       listener: (context, state) {
         if (state is PickMediaSuccess) {
           Navigator.of(context).popAndPushNamed("/uploadpost");
-          log("pushing to upload screen");
         }
         if (state is PickMediaLoading) {
-          log("loading pick media");
           // Navigator.of(context).pop();
         }
         if (state is PickMediaError) {

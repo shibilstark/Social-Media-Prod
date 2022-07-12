@@ -32,5 +32,22 @@ class PickMediaBloc extends Bloc<PickMediaEvent, PickMediaState> {
 
       emit(newState);
     });
+    on<PickCoverImage>((event, emit) async {
+      emit(PickMediaLoading());
+      // log("loading send");
+      final result = await _postRepo.pickPost(type: event.type);
+
+      final newState = result.fold(
+        (post) {
+          log("Emitted");
+          return PickCoverImageSuccess(postTypeModel: post!);
+        },
+        (failure) {
+          return PickCoverImageError(failure: failure);
+        },
+      );
+
+      emit(newState);
+    });
   }
 }

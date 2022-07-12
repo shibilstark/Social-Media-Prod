@@ -13,3 +13,17 @@ class PickMedia extends PickMediaEvent {
   @override
   List<Object> get props => [type];
 }
+
+class PickCoverImage extends PickMediaEvent {
+  final String type;
+  PickCoverImage({required this.type});
+  @override
+  List<Object> get props => [type];
+}
+
+class PickProfileImage extends PickMediaEvent {
+  final String type;
+  PickProfileImage({required this.type});
+  @override
+  List<Object> get props => [type];
+}
